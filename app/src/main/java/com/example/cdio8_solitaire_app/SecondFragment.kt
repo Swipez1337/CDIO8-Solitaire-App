@@ -1,9 +1,6 @@
 package com.example.cdio8_solitaire_app
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,8 +33,7 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            //findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-            dispatchTakePictureIntent()
+            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
     }
 
@@ -46,14 +42,4 @@ class SecondFragment : Fragment() {
         _binding = null
     }
 
-    //BELOW LINES COPIED FROM https://developer.android.com/training/camera/photobasics#kotlin FOR TESTING PURPOSES
-    val REQUEST_IMAGE_CAPTURE = 1
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-        } catch (e: ActivityNotFoundException) {
-            // display error state to the user
-        }
-    }
 }
