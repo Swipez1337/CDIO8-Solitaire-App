@@ -49,6 +49,7 @@ class SecondFragment : Fragment() {
                 Toast.makeText(context,"camera is not working",Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     override fun onDestroyView() {
