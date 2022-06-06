@@ -1,5 +1,6 @@
 package com.example.cdio8_solitaire_app
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +10,17 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.cdio8_solitaire_app.databinding.ActivityMainBinding
+import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val CAMERA_PERSISSION_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        checkPermission(android.Manifest.permission.CAMERA,CAMERA_PERSISSION_CODE)
         /*
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -61,4 +68,26 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    private fun checkPermission(permission: String, requestCode: Int){
+        if (ContextCompat.checkSelfPermission(this,permission)== PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
+        } else{
+            Toast.makeText(this,"Permission granted already", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERSISSION_CODE)
+            if (grantResults.isEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Camera Permission Gratend", Toast.LENGTH_SHORT).show()}
+            else{
+                Toast.makeText(this, "Camera Permission Not Gratend", Toast.LENGTH_SHORT).show()}
+    }
+
 }
