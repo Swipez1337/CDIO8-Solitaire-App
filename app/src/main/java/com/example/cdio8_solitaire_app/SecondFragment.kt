@@ -50,6 +50,8 @@ class SecondFragment : Fragment() {
 
 
         binding.buttonThird.visibility = View.GONE
+        binding.trK.visibility = View.GONE
+        binding.trK2.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             try {
@@ -77,7 +79,8 @@ class SecondFragment : Fragment() {
                     Toast.makeText(context,"camera not working",Toast.LENGTH_SHORT).show()
                 }
             }
-
+            binding.trK.visibility = View.VISIBLE
+            binding.trK2.visibility = View.VISIBLE
             binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
