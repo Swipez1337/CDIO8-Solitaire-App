@@ -69,10 +69,20 @@ class SecondFragment : Fragment() {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             val imageBitmap = data?.extras?.get("data") as Bitmap
             binding.buttonThird.visibility = View.VISIBLE
+            binding.buttonThird.setOnClickListener{
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                try {
+                    startActivityForResult(takePictureIntent,REQUEST_CODE)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context,"camera not working",Toast.LENGTH_SHORT).show()
+                }
+            }
+
             binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
             binding.imageView2.setImageBitmap(imageBitmap)
+
 
         }
         else{
