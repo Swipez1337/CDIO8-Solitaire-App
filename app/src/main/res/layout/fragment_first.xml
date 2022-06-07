@@ -26,7 +26,7 @@
         android:layout_width="138dp"
         android:layout_height="55dp"
         android:background="@drawable/button_shape"
-        android:text="@string/startgame_en"
+        android:text="@string/startgame"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
