@@ -49,7 +49,7 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
+        binding.buttonThird.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             try {
@@ -68,7 +68,9 @@ class SecondFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             val imageBitmap = data?.extras?.get("data") as Bitmap
+            binding.buttonThird.visibility = View.VISIBLE
             binding.buttonSecond.visibility = View.GONE
+            binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
             binding.imageView2.setImageBitmap(imageBitmap)
 
