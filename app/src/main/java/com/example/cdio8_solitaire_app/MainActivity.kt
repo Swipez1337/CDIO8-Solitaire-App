@@ -85,9 +85,9 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERSISSION_CODE)
             if (grantResults.isEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "Camera Permission Gratend", Toast.LENGTH_SHORT).show()}
+                Toast.makeText(this, "Camera Permission Grantend", Toast.LENGTH_SHORT).show()}
             else{
-                Toast.makeText(this, "Camera Permission Not Gratend", Toast.LENGTH_SHORT).show()}
+                Toast.makeText(this, "Camera Permission Not Grantend", Toast.LENGTH_SHORT).show()}
     }
 
 }
