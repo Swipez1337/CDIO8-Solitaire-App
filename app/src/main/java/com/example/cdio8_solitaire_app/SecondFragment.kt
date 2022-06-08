@@ -105,11 +105,11 @@ class SecondFragment : Fragment() {
             }
             binding.trK.visibility = View.VISIBLE
             binding.trK2.visibility = View.VISIBLE
-//            val imageBitmap = data?.extras?.get("data") as Bitmap
-            val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
+
+            val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             binding.imageView2.setImageBitmap(imageBitmap)
 
 
