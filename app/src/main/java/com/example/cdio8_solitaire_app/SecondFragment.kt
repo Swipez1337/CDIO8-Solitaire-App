@@ -65,6 +65,9 @@ class SecondFragment : Fragment() {
         binding.trK2.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
 
+            //The taken photo have be saved as a file, because otherwise we will
+            //only see the thumbnail, which is bas quality
+
             photoFile = getPhotoFile(FILE_NAME)
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val fileProvider = FileProvider.getUriForFile(this.requireContext(),"com.example.cdio8_solitaire_app.fileprovider",photoFile)
