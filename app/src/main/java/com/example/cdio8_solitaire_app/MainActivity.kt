@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.cdio8_solitaire_app.databinding.ActivityMainBinding
+import com.example.cdio_solitaire.controller.SolitaireSolver
 import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +33,11 @@ class MainActivity : AppCompatActivity() {
 
         this.getSupportActionBar()?.hide();
 
-
+        val solitaireSolver = SolitaireSolver()
+        solitaireSolver.addBottomCard(1,"C",false,3)
+        //solitaireSolver.addTopCard()
+        solitaireSolver.printContestSolution(solitaireSolver.solve())
+        //solitaireSolver.updateTalon()
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
