@@ -7,33 +7,47 @@ import java.lang.IndexOutOfBoundsException
 //controller class meant to follow the ruling given in following article: https://www.chessandpoker.com/solitaire_strategy.html
 //uses column model class
 class SolitaireSolver {
+    private var cardsInStock = 24
+    private var cardsInTalon = 0
     private val columns = Columns()
     private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
     private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
 
+    fun setNumberOfCardInStock(number: Int) {
+        cardsInStock = number
+    }
+
+    fun setNumberOfCardInTalon(number: Int) {
+        cardsInTalon = number
+    }
+
     //adds one card to bottom column at index
-    fun addBottomCard (rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
+    fun addBottomCard(rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int) {
         columns.addToBottomList(rank, suit, isDowncard, columnIndex)
     }
 
     //adds one card to top column at index
-    fun addTopCard (rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
+    fun addTopCard(rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int) {
         columns.addToTopList(rank, suit, isDowncard, columnIndex)
     }
+
     fun updateTalon(rank: Int?, suit: String?) {
         columns.updateTalon(rank, suit)
     }
+
     fun getNumberOfCardsInBotAndTop(): Int {
         return columns.getCardsInBotAndTop()
     }
 
+    fun clear() {
+        columns.clear()
+    }
 
-
-    fun printList(){
-        for (i in columns.getBottomList()){
+    fun printList() {
+        for (i in columns.getBottomList()) {
             var string = "["
-            if (i.isNotEmpty()){
-                for (j in i){
+            if (i.isNotEmpty()) {
+                for (j in i) {
                     string = string + "{" + j.rank + ", " + j.suit + "}" + ","
                 }
             }
@@ -44,13 +58,12 @@ class SolitaireSolver {
     }
 
     //prints the solution the algorithm has found
-    fun printSolution(solution: List<Card?>?){
+    fun printSolution(solution: List<Card?>?) {
         var columnSpecification = ""
-        if (solution != null){
-            if (solution[1] != null){
+        if (solution != null) {
+            if (solution[1] != null) {
                 println("" + solution[0]!!.rank + solution[0]!!.suit + " to " + solution[1]!!.rank + solution[1]!!.suit)
-            }
-            else{
+            } else {
                 if (solution[0]?.rank == 13) {
                     columnSpecification = "bottom column!"
                 }
@@ -59,34 +72,44 @@ class SolitaireSolver {
                 }
                 println("" + solution[0]!!.rank + solution[0]!!.suit + " to an empty " + columnSpecification)
             }
-        }
-
-        else{
+        } else {
             val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
 
-            if (cardsInBotAndTop > 48){
+            if (cardsInBotAndTop > 48) {
                 println("if talon card cannot be moved, game over")
                 return
-            }
-            else {
+            } else {
                 println("reset stock then Draw 3 from stock into talon.")
             }
         }
     }
 
-    fun printContestSolution(solution: List<Card?>?){
-        val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
-
-
-
+    fun printContestSolution() {
+        val solution = solve()
         if (solution != null) {
-            if (solution[0]!!.suit == "D"){
+            if (solution[0]!!.suit == "D") {
                 solution[0]!!.suit = "R"
             }
 
-            if (solution[0]!!.suit == "C"){
+            if (solution[0]!!.suit == "C") {
                 solution[0]!!.suit = "K"
             }
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit) {
+                if (cardsInStock < 3 && cardsInTalon < 3) {
+                    if (cardsInStock + cardsInTalon == 3) {
+                        cardsInStock = 0
+                        cardsInTalon = 3
+                        println("S")
+                        println("T")
+                        return
+                    }
+                    if (cardsInStock + cardsInTalon < 3 && cardsInStock != 0) {
+                        println("game over")
+                        return
+                    }
+                }
+            }
+
             if (solution[1] != null) {
                 var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
                 if (columnIndex != null) {
@@ -99,11 +122,10 @@ class SolitaireSolver {
             if (solution[1] == null) {
                 if (solution[0]!!.rank == 13) {
                     var columnIndex = 1
-                    for (i in columns.getBottomList()){
-                        if (i.isEmpty()){
+                    for (i in columns.getBottomList()) {
+                        if (i.isEmpty()) {
                             break
-                        }
-                        else{
+                        } else {
                             columnIndex++
                         }
                     }
@@ -113,25 +135,35 @@ class SolitaireSolver {
                     println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
                 }
             }
-            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit && cardsInBotAndTop < 49){
-                if (columns.getTalonCard().rank != null && columns.getTalonCard().rank != null) {
-                    println(",S")
-                }
-                println(",T")
+
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit) {
+                cardsInTalon--
             }
-    }
-    else{
-            if (cardsInBotAndTop < 49) {
-                if (columns.getTalonCard().rank != null && columns.getTalonCard().rank != null) {
-                    println(",S")
-                }
-                println(",T")
-            }
-            else{
+        } else {
+            if (cardsInStock == 0 && cardsInTalon == 3) {
                 println("game over")
-            }
                 return
             }
+            if (cardsInStock < 3) {
+                if (cardsInTalon + cardsInStock < 3) {
+                    println("game over")
+                    return
+                }
+                if (cardsInTalon + cardsInStock >= 3) {
+                    println("S")
+                    println("T")
+                    cardsInStock = cardsInStock + cardsInTalon - 3
+                    cardsInTalon = 3
+                    return
+                }
+            }
+            if (cardsInStock >= 3) {
+                println("T")
+                cardsInStock = cardsInStock - 3
+                cardsInTalon = cardsInTalon + 3
+                return
+            }
+        }
     }
 
     //solution algorithm. follows rules of the mentioned article
@@ -153,6 +185,7 @@ class SolitaireSolver {
         //prioritizes bottom to bottom transfers, then bottom to top.
         solution = generalSolution()
         if (solution != null) {
+
             return solution
         }
 
@@ -162,20 +195,20 @@ class SolitaireSolver {
         //    return solution
         //}
 
-            solution = talonSolution()
-            if (solution != null) {
-                return solution
-            }
+        solution = talonSolution()
+        if (solution != null) {
+            return solution
+        }
 
         //if no valid moves whatsoever, return null
         return null
     }
 
     //returns a move for a talon card
-    private fun talonSolution(): List<Card?>?{
+    private fun talonSolution(): List<Card?>? {
         val talonCard = columns.getTalonCard()
 
-        if (talonCard.rank == null || talonCard.suit == null){
+        if (talonCard.rank == null || talonCard.suit == null) {
             return null
         }
 
@@ -200,14 +233,14 @@ class SolitaireSolver {
         val bottomList = columns.getBottomList()
         if (bottomList.isNotEmpty()) {
             for (i in bottomList) {
-                for (j in i){
+                for (j in i) {
                     if (!j.isDowncard) {
                         val viableMove = getViableMove(
                             j,
-                            useRuleFour = true,
+                            useRuleFour = false,
                             useRuleFive = true,
                             useRuleSix = true,
-                            useRuleSeven = true,
+                            useRuleSeven = false,
                             useRuleEight = true,
                         )
                         if (viableMove != null) {
@@ -225,7 +258,7 @@ class SolitaireSolver {
         val bottomList = columns.getBottomList()
         if (bottomList.isNotEmpty()) {
             for (i in bottomList) {
-                for (j in i){
+                for (j in i) {
                     if (!j.isDowncard) {
                         val viableMove = getViableMove(
                             j,
@@ -252,7 +285,14 @@ class SolitaireSolver {
         val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
         if (validColumnsIndexes.isNotEmpty()) {
             for (i in validColumnsIndexes) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],false, false, false, false, false)
+                val viableMove = getViableMove(
+                    columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                )
                 if (viableMove != null) {
                     return (viableMove)
                 }
@@ -267,18 +307,23 @@ class SolitaireSolver {
         val viableMoves: MutableList<MutableList<Card?>?> = mutableListOf()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false, false, false)
+                val viableMove = getViableMove(
+                    columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                )
                 if (viableMove != null) {
                     viableMoves.add(viableMove)
                 }
             }
-            if (viableMoves.isEmpty()){
+            if (viableMoves.isEmpty()) {
                 return null
-            }
-            else if (viableMoves.size == 1){
+            } else if (viableMoves.size == 1) {
                 return viableMoves[0]
-            }
-            else {
+            } else {
                 return ruleThree(viableMoves)
             }
         }
@@ -291,7 +336,7 @@ class SolitaireSolver {
     fun ruleThree(viableMoves: MutableList<MutableList<Card?>?>): MutableList<Card?>? {
         var biggestNumberOfDowncards: Int? = null
         var currentSolution: MutableList<Card?>? = null
-        for (i in viableMoves){
+        for (i in viableMoves) {
             if (i?.get(0) != null) {
                 val downcards = columns.getNumberOfDowncardsForCard(i[0]!!)
                 if (biggestNumberOfDowncards == null && currentSolution == null) {
@@ -314,11 +359,11 @@ class SolitaireSolver {
         }
         val firstColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[0]!!)!!)
         var secondColumnSize = 0
-        if (solution[1] != null){
+        if (solution[1] != null) {
             secondColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[1]!!)!!)
         }
 
-        val difference = firstColumnSize- secondColumnSize
+        val difference = firstColumnSize - secondColumnSize
         if (difference > 1) {
             return true
         }
@@ -328,44 +373,43 @@ class SolitaireSolver {
     //returns true if there is a king waiting to take a spot after moving a card
     //note: the function assumes that a solution exists, and will still return true if the play will not actually clear the spot
     //only returns false if a play will clear a spot AND there isn't a king waiting to take it
-    fun ruleFive(card: Card): Boolean{
+    fun ruleFive(card: Card): Boolean {
         val bottomList = columns.getBottomList()
         var kingWaiting = false
         var emptySpot = false
-        var cardFound = false
-        for (i in bottomList) {
-            if (i.isNotEmpty()) {
-                if (!cardFound || !kingWaiting) {
-                    var index = 0
-                    for (j in i) {
-                        if (j.rank == card.rank && j.suit == card.suit) {
-                            if (i.size - index == 1) {
-                                emptySpot = true
-                            }
-                            cardFound = true
-                        }
 
-                        if (j.rank == 13 && !j.isDowncard) {
-                            if (j.rank == card.rank && j.suit == card.suit){
-                                continue
-                            }
-                            else{
-                                kingWaiting = true
-                            }
+        for (cardList in bottomList) {
+            if (cardList.isNotEmpty()) {
+                for (index in cardList.indices) {
+                    if (cardList[index].rank == 13 && !cardList[index].isDowncard) {
+                        if (cardList[index].rank == card.rank && cardList[index].suit == card.suit) {
+                            continue
                         }
-
-                        if (cardFound && kingWaiting){
+                        if (cardList.size - index == 1) {
+                            continue
+                        } else {
+                            kingWaiting = true
                             break
                         }
-                        index++
                     }
                 }
             }
-            if (kingWaiting && emptySpot){
-                return true
+        }
+        for (cardList in bottomList) {
+            if (cardList.isNotEmpty()) {
+                for (index in cardList.indices) {
+                    if (cardList[index].rank == card.rank && cardList[index].suit == card.suit) {
+                        if (cardList.size - index == 1) {
+                            emptySpot = true
+                        }
+                    }
+                }
             }
         }
-        if (!kingWaiting && emptySpot){
+        if (kingWaiting && emptySpot) {
+            return true
+        }
+        if (!kingWaiting && emptySpot) {
             return false
         }
         return true
@@ -375,7 +419,7 @@ class SolitaireSolver {
         if (card.rank != 13) {
             return false
         }
-        if (columns.getNumberOfDowncardsForCard(card) == columns.getBiggestNumberOfDowncards()){
+        if (columns.getNumberOfDowncardsForCard(card) == columns.getBiggestNumberOfDowncards()) {
             return true
         }
         return false
@@ -383,33 +427,32 @@ class SolitaireSolver {
 
     //takes a solution and returns true if it does not violate rule 7
     fun ruleSeven(solution: MutableList<Card?>?): Boolean {
-        if(solution == null){
+        if (solution == null) {
             return true
         }
 
         //if moving a card allows a play that frees a downcard, return true
         //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
-        if (solution [0] != null) {
+        if (solution[0] != null) {
             if (allowsFreedDowncard(solution[0]!!)) {
                 return true
             }
-            if ( ruleFive(solution[0]!!)){
+            if (ruleFive(solution[0]!!)) {
                 return true
             }
         }
-
         return false
     }
 
     //takes a specific solution and its list, and returns true if it does not violate rule 8
-    fun ruleEight(solution: List<Card?>?, solutionList: MutableList<MutableList<Card?>?>): Boolean{
-        if (solution != null){
-            if (solution[0]!!.rank  != 5 && solution[0]!!.rank != 6 &&  solution[0]!!.rank  != 7  && solution[0]!!.rank  != 8){
+    fun ruleEight(solution: List<Card?>?, solutionList: MutableList<MutableList<Card?>?>): Boolean {
+        if (solution != null) {
+            if (solution[0]!!.rank != 5 && solution[0]!!.rank != 6 && solution[0]!!.rank != 7 && solution[0]!!.rank != 8) {
                 return true
             }
 
             //It will allow a play or transfer that will IMMEDIATELY free a downcard
-            if (solution[0]?.let { allowsFreedDowncard(it) }!!){
+            if (solution[0]?.let { allowsFreedDowncard(it) }!!) {
                 return true
             }
 
@@ -438,28 +481,31 @@ class SolitaireSolver {
                 return true
             }
         }
-
         return false
     }
 
-    private fun ruleNine(bottomSolutions: MutableList<MutableList<Card?>?>, topSolutions: MutableList<MutableList<Card?>?>): MutableList<Card?>?{
+    private fun ruleNine(
+        bottomSolutions: MutableList<MutableList<Card?>?>,
+        topSolutions: MutableList<MutableList<Card?>?>
+    ): MutableList<Card?>? {
         //if given a choice(bottom solution), use rule 3
-        if (bottomSolutions.size > 1){
+
+        if (bottomSolutions.size > 1) {
             return ruleThree(bottomSolutions)
         }
 
         //if only one choice. return it
-        if (bottomSolutions.size == 1){
+        if (bottomSolutions.size == 1) {
             return bottomSolutions[0]
         }
 
         //if given a choice (top solution), use rule 3
-        if (topSolutions.size > 1){
+        if (topSolutions.size > 1) {
             return ruleThree(topSolutions)
         }
 
         //if only one choice. return it
-        if (topSolutions.size == 1){
+        if (topSolutions.size == 1) {
             return topSolutions[0]
         }
 
@@ -474,10 +520,10 @@ class SolitaireSolver {
         val index = columns.getColumnsIndexOfCard(card)
         if (index != null) {
             try {
-                if (columns.getBottomList()[index][cardIndex+1].isDowncard) {
+                if (columns.getBottomList()[index][cardIndex + 1].isDowncard) {
                     willFree = true
                 }
-            }catch (e: IndexOutOfBoundsException){
+            } catch (e: IndexOutOfBoundsException) {
                 return false
             }
         }
@@ -485,7 +531,7 @@ class SolitaireSolver {
     }
 
     //this function returns true if moving a card will allow the card beneath it to free a downcard (the card to free the downcard has to have an immediate valid move for the ruling)
-    fun allowsFreedDowncard (card: Card): Boolean{
+    fun allowsFreedDowncard(card: Card): Boolean {
         var allowsFree = false
         val columnIndex = columns.getColumnsIndexOfCard(card)
         if (columnIndex != null) {
@@ -543,7 +589,15 @@ class SolitaireSolver {
     //first index: from
     //second index: to
     //null in return list means an empty column
-    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean, useRuleSeven: Boolean, useRuleEight: Boolean): MutableList<Card?>? {
+    private fun getViableMove(
+        card: Card,
+        useRuleFour: Boolean,
+        useRuleFive: Boolean,
+        useRuleSix: Boolean,
+        useRuleSeven: Boolean,
+        useRuleEight: Boolean
+    ): MutableList<Card?>? {
+
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
         var ownColumn: Boolean
@@ -555,7 +609,7 @@ class SolitaireSolver {
             //if moving to empty column
             if (i.isEmpty()) {
                 if (isValidMove(card, null, true)) {
-                    bottomSolutions.add (mutableListOf(card, null))
+                    bottomSolutions.add(mutableListOf(card, null))
                 }
             }
 
@@ -568,7 +622,7 @@ class SolitaireSolver {
                     break
                 }
             }
-            if (ownColumn){
+            if (ownColumn) {
                 continue
             }
 
@@ -577,12 +631,12 @@ class SolitaireSolver {
                 currentSolution = mutableListOf(card, i[0])
 
                 //if we want to use rule four but its violated the solution becomes null
-                if (useRuleFour){
-                    if (!ruleFour(currentSolution)){
+                if (useRuleFour) {
+                    if (!ruleFour(currentSolution)) {
                         currentSolution = null
                     }
                 }
-                if (currentSolution != null){
+                if (currentSolution != null) {
                     bottomSolutions.add(currentSolution)
                 }
 
@@ -607,28 +661,26 @@ class SolitaireSolver {
                     break
                 }
             }
-            if (ownColumn){
+            if (ownColumn) {
                 continue
             }
 
             //if given card can move to a top column, add it to top solutions list
             else if (isValidMove(card, j[0], false)) {
                 val index = columns.getColumnsIndexOfCard(card)
-                if (index != null){
-                    if (columns.getBottomList()[index][0].rank == card.rank && columns.getBottomList()[index][0].suit == card.suit){
+                if (index != null) {
+                    if (columns.getBottomList()[index][0].rank == card.rank && columns.getBottomList()[index][0].suit == card.suit) {
                         topSolutions.add(mutableListOf(card, j[0]))
                     }
-                }
-                else{
+                } else {
                     topSolutions.add(mutableListOf(card, j[0]))
                 }
-
 
 
             }
 
             //if rule seven is toggled, we go through every solution and remove them if they violate it
-            if (useRuleSeven){
+            if (useRuleSeven) {
                 if (topSolutions.isNotEmpty()) {
                     for (i in topSolutions.indices) {
                         if (!ruleSeven(topSolutions[i])) {
@@ -643,7 +695,7 @@ class SolitaireSolver {
         //aditional check given optional rules. these only null the solutions, but we remove them later
 
         //rule five
-        if (useRuleFive){
+        if (useRuleFive) {
             for (i in bottomSolutions.indices) {
                 if (bottomSolutions[i] != null) {
                     if (!ruleFive(bottomSolutions[i]?.get(0)!!)) {
@@ -654,7 +706,7 @@ class SolitaireSolver {
         }
 
         //rule six
-        if (useRuleSix){
+        if (useRuleSix) {
             for (i in bottomSolutions.indices) {
                 if (bottomSolutions[i] != null) {
                     if (bottomSolutions[i]?.get(0)?.rank == 13) {
@@ -667,29 +719,57 @@ class SolitaireSolver {
         }
 
         //rule eight
-        if (useRuleEight){
-            for (i in bottomSolutions.indices) {
-                if (bottomSolutions[i] != null) {
-                    if (bottomSolutions[i]?.get(0)?.rank == 13) {
-                        if (!bottomSolutions[i]?.let { ruleEight(it, bottomSolutions) }!!) {
-                            bottomSolutions[i] = null
+        if (useRuleEight) {
+            if (bottomSolutions.isNotEmpty()) {
+                for (i in bottomSolutions.indices) {
+                    if (bottomSolutions[i] != null) {
+                        if (bottomSolutions[i]?.get(0)?.rank == 13) {
+                            if (!bottomSolutions[i]?.let { ruleEight(it, bottomSolutions) }!!) {
+                                bottomSolutions[i] = null
+                            }
                         }
                     }
                 }
             }
         }
 
-        //remove null values from solution list (solutions that violate algorithm rules)
-        for (i in bottomSolutions.indices){
-            if (bottomSolutions[i] == null){
-                bottomSolutions.removeAt(i)
+        //we do not consider moving cards from bottom to bottom if they sit on a viable target (to avoid loops)
+        for (i in bottomSolutions.indices) {
+            if (bottomSolutions[i] != null) {
+                val columnIndex = columns.getColumnsIndexOfCard(bottomSolutions[i]!![0]!!)
+                if (columnIndex != null) {
+                    for (j in bottomColumns[columnIndex].indices) {
+                        if (bottomColumns[columnIndex][j].rank == card.rank && bottomColumns[columnIndex][j].suit == card.suit) {
+                            try {
+                                if (!bottomColumns[columnIndex][j + 1].isDowncard) {
+                                    if (isValidMove(card, bottomColumns[columnIndex][j + 1], bottomRules = true)) {
+                                        bottomSolutions[i] = null
+                                    }
+                                }
+                            } catch (e: IndexOutOfBoundsException) {
+                                continue
+                            }
+                        }
+                    }
+                }
             }
         }
 
 
+        //remove null values from solution list (solutions that violate algorithm rules)
+        if (bottomSolutions.isNotEmpty()) {
+            var removed = 0
+            for (i in bottomSolutions.indices) {
+                if (bottomSolutions[i - removed] == null) {
+                    bottomSolutions.removeAt(i - removed)
+                    removed++
+                }
+            }
+        }
+
         //the order in which solutions are given as the "optimal play", is decided to be bottom solutions before top solutions
 
-     return ruleNine(bottomSolutions, topSolutions)
+        return ruleNine(bottomSolutions, topSolutions)
     }
 
     //returns true if given a move that CAN be made ALSO doesnt violate the algorithms conditional rules
@@ -705,8 +785,8 @@ class SolitaireSolver {
             if (cardToMove.suit != null && cardToMove.rank != null) {
 
                 //likewise moving to a non null card with non null ranks or suits are not considered
-                if (cardToMoveTo != null){
-                    if (cardToMoveTo.rank  == null || cardToMoveTo.suit == null){
+                if (cardToMoveTo != null) {
+                    if (cardToMoveTo.rank == null || cardToMoveTo.suit == null) {
                         return false
                     }
                 }
@@ -748,8 +828,8 @@ class SolitaireSolver {
             if (cardToMove.suit != null && cardToMove.rank != null) {
 
                 //likewise moving to a non null card with non null ranks or suits are not considered
-                if (cardToMoveTo != null){
-                    if (cardToMoveTo.rank  == null || cardToMoveTo.suit == null){
+                if (cardToMoveTo != null) {
+                    if (cardToMoveTo.rank == null || cardToMoveTo.suit == null) {
                         return false
                     }
                 }

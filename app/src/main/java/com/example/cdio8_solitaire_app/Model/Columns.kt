@@ -23,8 +23,17 @@ class Columns() {
         private var talon: Card = Card(null,null,false)
 
         //lists
-        private val topList: List<MutableList<Card>> = listOf(top_column1,top_column2,top_column3,top_column4)
-        private val bottomList:List<MutableList<Card>> = listOf(bottom_column1,bottom_column2,bottom_column3,bottom_column4,bottom_column5,bottom_column6,bottom_column7)
+        private var topList: List<MutableList<Card>> = listOf(top_column1,top_column2,top_column3,top_column4)
+        private var bottomList:List<MutableList<Card>> = listOf(bottom_column1,bottom_column2,bottom_column3,bottom_column4,bottom_column5,bottom_column6,bottom_column7)
+
+        fun clear(){
+                for (i in bottomList){
+                        i.clear()
+                }
+                for (i in topList){
+                        i.clear()
+                }
+        }
 
         //given a list of cards, adds every card into given column index of bottom list
         fun addToBottomList(rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
@@ -109,7 +118,7 @@ class Columns() {
                                 }
                         }
                 }
-                        return viableIndexes
+                return viableIndexes
         }
 
 
@@ -178,7 +187,6 @@ class Columns() {
                 }
                 return cardIndex
         }
-
         //returns number of downcards in the bottom column of given card.
         //returns 0 if the card doesnt exist, or there are no downcards
         public fun getNumberOfDowncardsForCard(card: Card): Int {
