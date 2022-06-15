@@ -2,6 +2,7 @@ package com.example.cdio8_solitaire_app
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -13,9 +14,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
+import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.ActivityMainBinding
 import com.example.cdio_solitaire.controller.SolitaireSolver
 import java.util.jar.Manifest
+import kotlin.math.log10
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,10 +38,14 @@ class MainActivity : AppCompatActivity() {
 
         this.getSupportActionBar()?.hide();
 
+        Log.i("this is test", getPythonHelloWorld())
+
+
         val solitaireSolver = SolitaireSolver()
         solitaireSolver.addBottomCard(1,"C",false,3)
         //solitaireSolver.addTopCard()
-        solitaireSolver.printContestSolution(solitaireSolver.solve())
+//        solitaireSolver.printContestSolution(solitaireSolver.solve())
+
         //solitaireSolver.updateTalon()
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -51,6 +60,18 @@ class MainActivity : AppCompatActivity() {
 
          */
     }
+
+    private fun getPythonHelloWorld(): String {
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("helloworldscript")
+        return pythonFile.callAttr("helloworld").toString()
+    }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -94,5 +115,6 @@ class MainActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this, "Camera Permission Not Grantend", Toast.LENGTH_SHORT).show()}
     }
+
 
 }

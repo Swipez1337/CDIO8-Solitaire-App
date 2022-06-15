@@ -1,5 +1,10 @@
+//apply plugin: 'com.android.application'
+//apply plugin: 'com.chaquo.python'
+//apply plugin: 'kotlin-android'
+
 plugins {
     id 'com.android.application'
+    id 'com.chaquo.python'
     id 'kotlin-android'
 }
 
@@ -14,6 +19,36 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        sourceSets {
+            main {
+                python {
+                    srcDirs = ["src/main/python"]
+                }
+            }
+        }
+        python {
+            buildPython "C:/Python39/python.exe"
+//            buildPython "C:/Python39/python.exe", "-3.9"
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+        python {
+            pip {
+                install "wheel==0.36.2"
+//                install "numpy==1.21.5"
+//                install "imutils==0.5.4"
+
+//                install "pip==21.1.2"
+//                install "Pillow==9.1.1"
+//                install "opencv-python==4.5.1.48"
+
+//                install "matplotlib==3.1.2"
+//                install "scikit-image==0.16.2"
+//                install "sklearn==0.0"
+            }
+        }
     }
 
     buildTypes {

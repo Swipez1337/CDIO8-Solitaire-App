@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.*
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.fragment.findNavController
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
+import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.FragmentSecondBinding
 import java.io.File
 import java.io.File.createTempFile
@@ -71,6 +75,8 @@ class SecondFragment : Fragment() {
             val fileProvider = FileProvider.getUriForFile(this.requireContext(),"com.example.cdio8_solitaire_app.fileprovider",photoFile)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
+//            Log.i("this is test", getPythonHelloWorld())
+
             try {
                 startActivityForResult(takePictureIntent,REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
@@ -78,6 +84,32 @@ class SecondFragment : Fragment() {
             }
         }
     }
+
+//    private fun imageRecognition() {
+//        if (!Python.isStarted()) {
+//            Python.start(AndroidPlatform(this.requireContext()))
+//        }
+//
+//    }
+
+
+
+
+
+
+    private fun getPythonHelloWorld(): String {
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this.requireContext()))
+        }
+
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("helloworldscript")
+        return pythonFile.callAttr("helloworld").toString()
+    }
+
+
+
+
 
     private fun getPhotoFile(fileName: String): File {
         val storageDir = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
