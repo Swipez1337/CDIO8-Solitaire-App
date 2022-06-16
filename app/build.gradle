@@ -37,11 +37,12 @@ android {
         python {
             pip {
                 install "wheel==0.36.2"
-//                install "numpy==1.21.5"
-//                install "imutils==0.5.4"
+                install "numpy"
+                install "opencv-python"
+                install "Pillow"
+                install "imutils==0.5.4"
 
 //                install "pip==21.1.2"
-//                install "Pillow==9.1.1"
 //                install "opencv-python==4.5.1.48"
 
 //                install "matplotlib==3.1.2"

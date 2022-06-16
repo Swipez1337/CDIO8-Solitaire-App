@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         this.getSupportActionBar()?.hide();
 
-        Log.i("this is test", getPythonHelloWorld())
+        Log.i("this is test", imageRecognition())
 
 
         val solitaireSolver = SolitaireSolver()
@@ -60,6 +60,19 @@ class MainActivity : AppCompatActivity() {
 
          */
     }
+
+    private fun imageRecognition(): String {
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("main")
+        return pythonFile.callAttr("recognizeImage").toString()
+    }
+
+
+
+
 
     private fun getPythonHelloWorld(): String {
         if (!Python.isStarted()) {
