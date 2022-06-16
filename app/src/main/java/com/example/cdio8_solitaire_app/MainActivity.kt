@@ -38,7 +38,10 @@ class MainActivity : AppCompatActivity() {
 
         this.getSupportActionBar()?.hide();
 
-        Log.i("this is test", imageRecognition())
+        val res = imageRecognition()
+
+
+        Log.i("result", res.toString())
 
 
         val solitaireSolver = SolitaireSolver()
@@ -61,13 +64,14 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    private fun imageRecognition(): String {
+    private fun imageRecognition(): List<PyObject> {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
         val python = Python.getInstance()
         val pythonFile = python.getModule("main")
-        return pythonFile.callAttr("recognizeImage").toString()
+        val res = pythonFile.callAttr("recognizeImage").asList()
+        return res
     }
 
 
