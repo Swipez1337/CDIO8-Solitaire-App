@@ -1,24 +1,28 @@
 package com.example.cdio8_solitaire_app
 
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.provider.SyncStateContract
-import android.util.Log
+import android.util.Base64
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.cdio8_solitaire_app.databinding.ActivityMainBinding
-import com.example.cdio_solitaire.Model.Columns
 import com.example.cdio_solitaire.controller.SolitaireSolver
+import java.io.ByteArrayOutputStream
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,14 +42,11 @@ class MainActivity : AppCompatActivity() {
 //        val res = imageRecognition()
 //        parseScriptOutput(imageRecognition())
 
-
-
 //        Log.i("result", res.toString())
-
-
+        val bMap = BitmapFactory.decodeFile("2.png")
+        getPythonPicture(bMap)
 
         val solitaireSolver = SolitaireSolver()
-        solitaireSolver.addBottomCard(1,"C",false,3)
         //solitaireSolver.addTopCard()
 //        solitaireSolver.printContestSolution(solitaireSolver.solve())
 
@@ -64,8 +65,6 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-
-
     private fun getPythonHelloWorld(): String {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
@@ -74,6 +73,22 @@ class MainActivity : AppCompatActivity() {
         val python = Python.getInstance()
         val pythonFile = python.getModule("helloworldscript")
         return pythonFile.callAttr("helloworld").toString()
+    }
+
+    private fun getPythonPicture(picture: Bitmap): PyObject  {
+        //code largely gotten from:
+        //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
+        val baos = ByteArrayOutputStream()
+        picture.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val byteArray = baos.toByteArray()
+        val stringImage = Base64.encodeToString(byteArray, Base64.DEFAULT)
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("getPictureSript")
+
+        return pythonFile.callAttr("getPicture", stringImage)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

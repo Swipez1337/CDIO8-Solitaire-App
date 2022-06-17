@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import math
 
-word = "turboretard"
+word = "turbo"
 
 def helloworld():
     sqrut = math.sqrt(4)
