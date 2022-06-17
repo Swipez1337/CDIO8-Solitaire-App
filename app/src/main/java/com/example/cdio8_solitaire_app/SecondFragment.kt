@@ -29,6 +29,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.FragmentSecondBinding
+import com.example.cdio_solitaire.Model.Columns
 import java.io.File
 import java.io.File.createTempFile
 import java.util.jar.Manifest
@@ -85,30 +86,16 @@ class SecondFragment : Fragment() {
         }
     }
 
-//    private fun imageRecognition() {
-//        if (!Python.isStarted()) {
-//            Python.start(AndroidPlatform(this.requireContext()))
-//        }
-//
-//    }
-
-
-
-
-
-
-    private fun getPythonHelloWorld(): String {
+    // recognizes cards in given image and produces output for solution algorithm (NOT YET FULLY IMPLEMENTED)
+    private fun imageRecognition(arg: String): String {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this.requireContext()))
         }
-
         val python = Python.getInstance()
-        val pythonFile = python.getModule("helloworldscript")
-        return pythonFile.callAttr("helloworld").toString()
+        val pythonFile = python.getModule("main")
+        val value = pythonFile.callAttr("recognizeImage").toString()
+        return value
     }
-
-
-
 
 
     private fun getPhotoFile(fileName: String): File {
@@ -148,6 +135,101 @@ class SecondFragment : Fragment() {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
+    //parses output from python script and inserts them into columns structure
+    private fun parseScriptOutput(stringData: String) {
+        val charIterator = stringData.toCharArray().iterator()
+        val allColumns: MutableList<MutableList<String>> = mutableListOf()
+        val columnStart = '['
+        val columnEnd = ']'
+        val objectStartEnd = '"'
 
+        // below outer while loop parses initial script output organising each column into string lists
+        // ignore first start bracket
+        charIterator.next()
+        while(charIterator.hasNext()) {
+            var next = charIterator.next()
 
+            // if new column
+            if (next == columnStart) {
+                next = charIterator.next()
+                val column = mutableListOf<String>()
+
+                // in column
+                while (next != columnEnd) {
+
+                    // start of object
+                    if(next == objectStartEnd) {
+                        next = charIterator.next()
+                        var cardval = String()
+
+                        // in object string
+                        while (next != objectStartEnd) {
+                            val sString = next.toString()
+                            cardval += sString
+                            next = charIterator.next()
+                        }
+                        // add object to column
+                        column.add(cardval)
+                    }
+                    next = charIterator.next()
+                }
+                // add column to all columns
+                allColumns.add(column)
+            }
+        }
+
+        // further parsing to add data in columns object
+        val columns = Columns()
+        val backside = 'b'
+        val gap = ' '
+        var i = 0
+        for (column in allColumns) {
+            for (card in column) {
+                val cardIterator = card.toCharArray().iterator()
+                var next = cardIterator.next()
+
+                // card faces down
+                if (next == backside) {
+                    columns.addToBottomList(null, null, true, i)
+                }
+                // card faces up
+                else {
+                    var stringRank = ""
+                    var suit = ""
+                    while (cardIterator.hasNext()) {
+
+                        // when part of value is rank
+                        if (next != gap) {
+                            stringRank += next.toString()
+                            next = cardIterator.next()
+                        }
+                        // when part of value is suit
+                        else {
+                            suit = cardIterator.next().toString()
+                        }
+                    }
+                    // if card is bottomcard
+                    if (i <= 6) {
+                        columns.addToBottomList(stringRank.toInt(), suit, false, i)
+                    }
+                    // if card is top card
+                    else {
+                        columns.addToTopList(stringRank.toInt(), suit, false, i)
+                    }
+                }
+            }
+            i += 1
+        }
+    }
+
+    // test method for identifying issues with kotlin to python script communication
+    private fun getPythonHelloWorld(): String {
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this.requireContext()))
+        }
+
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("helloworldscript")
+        return pythonFile.callAttr("helloworld").toString()
+    }
 }
