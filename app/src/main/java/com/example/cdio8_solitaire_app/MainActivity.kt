@@ -2,8 +2,8 @@ package com.example.cdio8_solitaire_app
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,11 +16,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.ActivityMainBinding
+import com.example.cdio_solitaire.Model.Columns
 import com.example.cdio_solitaire.controller.SolitaireSolver
-import java.util.jar.Manifest
-import kotlin.math.log10
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,11 +35,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         this.getSupportActionBar()?.hide();
+//        val res = imageRecognition()
+        parseScriptOutput(imageRecognition())
 
-        val res = imageRecognition()
 
 
-        Log.i("result", res.toString())
+//        Log.i("result", res.toString())
+
 
 
         val solitaireSolver = SolitaireSolver()
@@ -64,16 +64,86 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    private fun imageRecognition(): List<PyObject> {
+    private fun imageRecognition(): String {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
         val python = Python.getInstance()
         val pythonFile = python.getModule("main")
-        val res = pythonFile.callAttr("recognizeImage").asList()
-        return res
+        val value = pythonFile.callAttr("recognizeImage").toString()
+//        for (letter in letters)
+//            Log.i("letter",letters.next().toString())
+//        val res = value.toString()
+//        Log.i("res list", res)
+        return value
     }
 
+    private fun parseScriptOutput(stringData: String) {
+
+        val charData = stringData.toCharArray()
+        val charIterator = charData.iterator()
+        val allColumns: MutableList<MutableList<String>> = mutableListOf()
+        val columnStart = '['
+        val columnEnd = ']'
+        val objectStartEnd = '"'
+
+
+
+        // ignore first start bracket
+        charIterator.next()
+
+        while(charIterator.hasNext()) {
+            var next = charIterator.next()
+
+            // if new column
+            if (next == columnStart) {
+                next = charIterator.next()
+                val column = mutableListOf<String>()
+
+                // in column
+                while (next != columnEnd) {
+
+                    // start of object
+                    if(next == objectStartEnd) {
+                        next = charIterator.next()
+                        var cardval = String()
+
+                        // in object string
+                        while (next != objectStartEnd) {
+                            val sString = next.toString()
+                            cardval += sString
+                            next = charIterator.next()
+                        }
+                        // add object to column
+                        column.add(cardval)
+                    }
+                    next = charIterator.next()
+                }
+                // add column to all columns
+                allColumns.add(column)
+            }
+        }
+//        val columns = Columns()
+//        val backside = 'b'
+//        var i = 0
+//        for (column in allColumns) {
+//            for (card in column) {
+//                val cardIterator = card.toCharArray().iterator()
+//                val next = cardIterator.next()
+//
+//                // card is backcard
+//                if (next == backside) {
+//                    columns.addToBottomList(null, null, true, i)
+//                }
+//                else {
+//
+//                }
+//            }
+//        }
+
+
+
+    }
 
 
 
