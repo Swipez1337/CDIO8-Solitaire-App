@@ -207,7 +207,8 @@ def watchAndDisplayCards(testImage, matchingThreshold):
 
     finalList = transformToCards(allMatchSets)
     columnList = layoutMatches.divideIntoColumns(finalList)
-    result = columnsDividedDTO.getJsonList(columnList)
+    # layoutMatches.printColumnsDivided(columnList)
+    columnsDividedDTO.getJsonList(columnList)
 
     if len(allMatches) != 0:
         testMethods.findErrors(testImage, finalList, True)

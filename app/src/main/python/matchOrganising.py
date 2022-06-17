@@ -28,12 +28,15 @@ def transformToCards(allSets):
             if side == 'left':
                 coord[0] = coord[0] + cardwidth/2
             else: coord[0] = coord[0] - cardwidth/2
-        templist.append(Identity(name, coord))
+        templist.append(Identity(name, shiftBacksideXval(identity)))
     identityList += templist
-
-
-
     return identityList
+
+def shiftBacksideXval(identity):
+    # HARDCODED x-value for shifting backside x-value right
+    if identity.getName() == 'backside':
+        identity.coord = [identity.getCoord()[0]+15, identity.getCoord()[1]]
+    return identity.getCoord()
 
 
 # TOD0: Fix issue described in note
