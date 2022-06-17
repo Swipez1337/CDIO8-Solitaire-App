@@ -87,8 +87,6 @@ class MainActivity : AppCompatActivity() {
         val columnEnd = ']'
         val objectStartEnd = '"'
 
-
-
         // ignore first start bracket
         charIterator.next()
 
@@ -123,26 +121,47 @@ class MainActivity : AppCompatActivity() {
                 allColumns.add(column)
             }
         }
-//        val columns = Columns()
-//        val backside = 'b'
-//        var i = 0
-//        for (column in allColumns) {
-//            for (card in column) {
-//                val cardIterator = card.toCharArray().iterator()
-//                val next = cardIterator.next()
-//
-//                // card is backcard
-//                if (next == backside) {
-//                    columns.addToBottomList(null, null, true, i)
-//                }
-//                else {
-//
-//                }
-//            }
-//        }
 
+        val columns = Columns()
+        val backside = 'b'
+        val gap = ' '
+        var i = 0
+        for (column in allColumns) {
+            for (card in column) {
+                val cardIterator = card.toCharArray().iterator()
+                var next = cardIterator.next()
 
-
+                // card is backcard
+                if (next == backside) {
+                    columns.addToBottomList(null, null, true, i)
+                }
+                // card is front card
+                else {
+                    var stringRank = ""
+                    var suit = ""
+                    while (cardIterator.hasNext()) {
+                        // when part of value is rank
+                        if (next != gap) {
+                            stringRank += next.toString()
+                            next = cardIterator.next()
+                        }
+                        // when part of value is suit
+                        else {
+                            suit = cardIterator.next().toString()
+                        }
+                    }
+                    // if card is bottomcard
+                    if (i <= 6) {
+                        columns.addToBottomList(stringRank.toInt(), suit, false, i)
+                    }
+                    // if card is top card
+                    else {
+                        columns.addToTopList(stringRank.toInt(), suit, false, i)
+                    }
+                }
+            }
+            i += 1
+        }
     }
 
 
