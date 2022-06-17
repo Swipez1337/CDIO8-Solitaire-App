@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         val bMap = BitmapFactory.decodeFile("2.png")
         getPythonPicture(bMap)
 
-        val solitaireSolver = SolitaireSolver()
+//        val solitaireSolver = SolitaireSolver()
         //solitaireSolver.addTopCard()
 //        solitaireSolver.printContestSolution(solitaireSolver.solve())
 

@@ -30,6 +30,7 @@ import com.chaquo.python.android.AndroidPlatform
 import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.FragmentSecondBinding
 import com.example.cdio_solitaire.Model.Columns
+import com.example.cdio_solitaire.controller.SolitaireSolver
 import java.io.File
 import java.io.File.createTempFile
 import java.util.jar.Manifest
@@ -44,6 +45,8 @@ class SecondFragment : Fragment() {
     private val REQUEST_CODE = 1
     private lateinit var photoFile : File
     private val FILE_NAME = "photo.jpg"
+    val solitaireSolver = SolitaireSolver()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -70,6 +73,7 @@ class SecondFragment : Fragment() {
 
             //The taken photo have be saved as a file, because otherwise we will
             //only see the thumbnail, which is bas quality
+        val solitaireSolver = SolitaireSolver()
 
             photoFile = getPhotoFile(FILE_NAME)
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -210,11 +214,11 @@ class SecondFragment : Fragment() {
                     }
                     // if card is bottomcard
                     if (i <= 6) {
-                        columns.addToBottomList(stringRank.toInt(), suit, false, i)
+                        solitaireSolver.addBottomCard(stringRank.toInt(), suit, false, i)
                     }
                     // if card is top card
                     else {
-                        columns.addToTopList(stringRank.toInt(), suit, false, i)
+                        solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i)
                     }
                 }
             }
