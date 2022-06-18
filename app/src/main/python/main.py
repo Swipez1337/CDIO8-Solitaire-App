@@ -1,5 +1,6 @@
 # project is modified code from: https://github.com/naderchehab/card-detector
 import sys
+from com.chaquo.python import Python
 import cv2
 import layoutMatches
 import numpy as np
