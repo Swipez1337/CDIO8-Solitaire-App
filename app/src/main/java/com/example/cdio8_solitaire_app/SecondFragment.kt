@@ -131,6 +131,7 @@ class SecondFragment : Fragment() {
             val byteArray = baos.toByteArray()
             val path = sendPythonPicture(Base64.encodeToString(byteArray, Base64.DEFAULT))
             print(path)
+
             binding.imageView2.setImageBitmap(imageBitmap)
 
 

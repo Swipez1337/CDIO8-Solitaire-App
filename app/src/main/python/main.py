@@ -30,7 +30,7 @@ files_dir = str(Python.getPlatform().getApplication().getFilesDir())
 filename = "/currentImage.png"
 path = "".join((files_dir,filename))
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
-testImages = [path]
+testImages = ['test2.png']
 
 matchingThresholds = [.80, .81, .82, .83, .84, .85, .86]
 matchingThresholds = [.80]
