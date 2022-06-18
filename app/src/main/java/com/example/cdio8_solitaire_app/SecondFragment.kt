@@ -1,39 +1,27 @@
 package com.example.cdio8_solitaire_app
-
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.*
 import android.provider.MediaStore
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.FragmentSecondBinding
 import com.example.cdio_solitaire.Model.Columns
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.File.createTempFile
-import java.util.jar.Manifest
-import kotlin.math.log
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -47,6 +35,8 @@ class SecondFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+
 
     override fun onCreateView(
 
@@ -62,7 +52,6 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.buttonThird.visibility = View.GONE
         binding.trK.visibility = View.GONE
         binding.trK2.visibility = View.GONE
@@ -75,7 +64,6 @@ class SecondFragment : Fragment() {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val fileProvider = FileProvider.getUriForFile(this.requireContext(),"com.example.cdio8_solitaire_app.fileprovider",photoFile)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
-
 //            Log.i("this is test", getPythonHelloWorld())
 
             try {
@@ -84,19 +72,21 @@ class SecondFragment : Fragment() {
                 Toast.makeText(context,"camera not working",Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
-    // recognizes cards in given image and produces output for solution algorithm (NOT YET FULLY IMPLEMENTED)
-    private fun imageRecognition(arg: String): String {
+
+    private fun sendPythonPicture(picture: String): String  {
+        //code largely gotten from:
+        //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this.requireContext()))
         }
         val python = Python.getInstance()
-        val pythonFile = python.getModule("main")
-        val value = pythonFile.callAttr("recognizeImage").toString()
-        return value
+        val pythonFile = python.getModule("sendImage")
+        return pythonFile.callAttr("sendPicture", picture).toString()
     }
-
 
     private fun getPhotoFile(fileName: String): File {
         val storageDir = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -110,14 +100,14 @@ class SecondFragment : Fragment() {
 
     //Automatically used the image intent is used
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             binding.buttonThird.visibility = View.VISIBLE
-            binding.buttonThird.setOnClickListener{
+            binding.buttonThird.setOnClickListener {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 try {
-                    startActivityForResult(takePictureIntent,REQUEST_CODE)
+                    startActivityForResult(takePictureIntent, REQUEST_CODE)
                 } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context,"camera not working",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "camera not working", Toast.LENGTH_SHORT).show()
                 }
             }
             binding.trK.visibility = View.VISIBLE
@@ -125,11 +115,13 @@ class SecondFragment : Fragment() {
             binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
-
+            val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+            val byteArray = baos.toByteArray()
+            val path = sendPythonPicture(Base64.encodeToString(byteArray, Base64.DEFAULT))
+            print(path)
             binding.imageView2.setImageBitmap(imageBitmap)
-
-
         }
         else{
             super.onActivityResult(requestCode, resultCode, data)

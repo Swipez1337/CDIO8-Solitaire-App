@@ -1,4 +1,4 @@
-package com.example.cdio_solitaire
+ package com.example.cdio_solitaire
 
 import com.example.cdio_solitaire.Model.Card
 import com.example.cdio_solitaire.controller.SolitaireSolver

@@ -26,8 +26,11 @@ import sys
 
 
 show = False
+files_dir = str(Python.getPlatform().getApplication().getFilesDir())
+filename = "/currentImage.png"
+path = "".join((files_dir,filename))
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
-testImages = ['test2.png']
+testImages = [path]
 
 matchingThresholds = [.80, .81, .82, .83, .84, .85, .86]
 matchingThresholds = [.80]
@@ -67,8 +70,6 @@ def recognizeImage():
             result = watchAndDisplayCards(test, threshold)
             print("--- %s seconds ---" % (time.time() - start_time))
     return result
-
-
 
 # get the coordinates of a point rotated minus 'degrees' around center of image
 def rotationBacktrack(coordinates, degrees=0):

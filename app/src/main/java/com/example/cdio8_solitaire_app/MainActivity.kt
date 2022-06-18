@@ -43,8 +43,6 @@ class MainActivity : AppCompatActivity() {
 //        parseScriptOutput(imageRecognition())
 
 //        Log.i("result", res.toString())
-        val bMap = BitmapFactory.decodeFile("2.png")
-        getPythonPicture(bMap)
 
         val solitaireSolver = SolitaireSolver()
         //solitaireSolver.addTopCard()
@@ -69,26 +67,9 @@ class MainActivity : AppCompatActivity() {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
-
         val python = Python.getInstance()
         val pythonFile = python.getModule("helloworldscript")
         return pythonFile.callAttr("helloworld").toString()
-    }
-
-    private fun getPythonPicture(picture: Bitmap): PyObject  {
-        //code largely gotten from:
-        //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
-        val baos = ByteArrayOutputStream()
-        picture.compress(Bitmap.CompressFormat.PNG, 100, baos)
-        val byteArray = baos.toByteArray()
-        val stringImage = Base64.encodeToString(byteArray, Base64.DEFAULT)
-        if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(this))
-        }
-        val python = Python.getInstance()
-        val pythonFile = python.getModule("getPictureSript")
-
-        return pythonFile.callAttr("getPicture", stringImage)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
