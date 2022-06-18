@@ -27,9 +27,6 @@ import sys
 
 
 show = False
-files_dir = str(Python.getPlatform().getApplication().getFilesDir())
-filename = "/currentImage.png"
-path = "".join((files_dir,filename))
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
 testImages = ['test2.png']
 
@@ -72,6 +69,13 @@ def recognizeImage():
             print("--- %s seconds ---" % (time.time() - start_time))
     return result
 
+def recognizeTakenImage():
+    files_dir = str(Python.getPlatform().getApplication().getFilesDir())
+    filename = "/currentImage.png"
+    path = "".join((files_dir,filename))
+    result = watchAndDisplayCards(path, .86)
+    return result
+
 # get the coordinates of a point rotated minus 'degrees' around center of image
 def rotationBacktrack(coordinates, degrees=0):
     x = coordinates[0]
@@ -90,10 +94,10 @@ def watchAndDisplayCards(testImage, matchingThreshold):
     cardsDetected.clear()
     # originImage = cv2.imread(path.join(testImage))
     ## NEEDS UPDATE: order of getimage/grayscale/addpadding is wrong
-    filename = join(dirname(__file__), testImage)
+    filename = testImage
 
     # originImage = getImage(testImage, False)
-    originImage = cv2.imread(path.join(filename))
+    originImage = cv2.imread(filename)
 
     originImage = cv2.resize(originImage, (3088, 2316))
     # add padding to image to prevent search area from going out of bounds during template matching
@@ -119,7 +123,6 @@ def watchAndDisplayCards(testImage, matchingThreshold):
 
         backsideMatches = templateMatching.getMatches(areaToScan, backsideTemplate, matchingThreshold)
         backsideMatches = map(lambda match: {'actualLoc': match, 'name': 'backside'}, backsideMatches)
-
 
         # does this work with rotation?
         backsideList = list()

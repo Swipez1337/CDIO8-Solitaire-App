@@ -96,7 +96,16 @@ class SecondFragment : Fragment() {
         val pythonFile = python.getModule("sendImage")
         return pythonFile.callAttr("sendPicture", picture).toString()
     }
-
+    private fun recognizePicture(): String  {
+        //code largely gotten from:
+        //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this.requireContext()))
+        }
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("main")
+        return pythonFile.callAttr("recognizeTakenImage").toString()
+    }
 
     private fun getPhotoFile(fileName: String): File {
         val storageDir = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -130,10 +139,10 @@ class SecondFragment : Fragment() {
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             val byteArray = baos.toByteArray()
             val path = sendPythonPicture(Base64.encodeToString(byteArray, Base64.DEFAULT))
-            print(path)
-
+            //val result = recognizePicture()
+            //print(result)
+            //val savedImage = BitmapFactory.decodeFile(path)
             binding.imageView2.setImageBitmap(imageBitmap)
-
 
         }
         else{
