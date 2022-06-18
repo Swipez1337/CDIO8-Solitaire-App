@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
 //        Log.i("result", res.toString())
 
-        val solitaireSolver = SolitaireSolver()
+//        val solitaireSolver = SolitaireSolver()
         //solitaireSolver.addTopCard()
 //        solitaireSolver.printContestSolution(solitaireSolver.solve())
 
