@@ -33,7 +33,7 @@ class SecondFragment : Fragment() {
     private var _binding: FragmentSecondBinding? = null
     private val REQUEST_CODE = 1
     private lateinit var photoFile : File
-    private val FILE_NAME = "photo.jpg"
+    private val FILE_NAME = "photo"
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -65,7 +65,6 @@ class SecondFragment : Fragment() {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
 //            Log.i("this is test", getPythonHelloWorld())
-
             try {
                 startActivityForResult(takePictureIntent,REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
@@ -74,8 +73,7 @@ class SecondFragment : Fragment() {
         }
     }
 
-
-    private fun sendPythonPicture(picture: String): String  {
+    private fun sendPythonPicture(path: String): String  {
         //code largely gotten from:
         //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
         if (!Python.isStarted()) {
@@ -83,7 +81,7 @@ class SecondFragment : Fragment() {
         }
         val python = Python.getInstance()
         val pythonFile = python.getModule("sendImage")
-        return pythonFile.callAttr("sendPicture", picture).toString()
+        return pythonFile.callAttr("sendPicture", path).toString()
     }
     private fun recognizePicture(): String  {
         //code largely gotten from:
@@ -98,6 +96,9 @@ class SecondFragment : Fragment() {
 
     private fun getPhotoFile(fileName: String): File {
         val storageDir = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        print(storageDir)
+        val PATH = createTempFile(fileName, ".jpg",storageDir).absolutePath
+        print(PATH)
         return createTempFile(fileName, ".jpg",storageDir)
     }
 
@@ -124,11 +125,9 @@ class SecondFragment : Fragment() {
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
             //save picture
+            sendPythonPicture(photoFile.absolutePath)
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-            val byteArray= baos.toByteArray()
-            val imageString = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            sendPythonPicture(imageString)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             binding.imageView2.setImageBitmap(imageBitmap)
             val result = recognizePicture()
