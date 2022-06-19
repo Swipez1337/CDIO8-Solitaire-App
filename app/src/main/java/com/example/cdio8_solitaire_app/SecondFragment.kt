@@ -19,6 +19,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.cdio8_solitaire_app.databinding.FragmentSecondBinding
 import com.example.cdio_solitaire.Model.Columns
+import com.example.cdio_solitaire.controller.SolitaireSolver
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.File.createTempFile
@@ -34,6 +35,8 @@ class SecondFragment : Fragment() {
     private val REQUEST_CODE = 1
     private lateinit var photoFile : File
     private val FILE_NAME = "photo"
+    val solitaireSolver = SolitaireSolver()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -58,6 +61,8 @@ class SecondFragment : Fragment() {
         binding.trK2.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
             //The taken photo have be saved as a file, because otherwise we will
+            //only see the thumbnail, which is bas quality
+
             //only see the thumbnail, which is bad quality
             photoFile = getPhotoFile(FILE_NAME)
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -65,6 +70,7 @@ class SecondFragment : Fragment() {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
 //            Log.i("this is test", getPythonHelloWorld())
+
             try {
                 startActivityForResult(takePictureIntent,REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
@@ -214,11 +220,11 @@ class SecondFragment : Fragment() {
                     }
                     // if card is bottomcard
                     if (i <= 6) {
-                        columns.addToBottomList(stringRank.toInt(), suit, false, i)
+                        solitaireSolver.addBottomCard(stringRank.toInt(), suit, false, i)
                     }
                     // if card is top card
                     else {
-                        columns.addToTopList(stringRank.toInt(), suit, false, i)
+                        solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i)
                     }
                 }
             }
