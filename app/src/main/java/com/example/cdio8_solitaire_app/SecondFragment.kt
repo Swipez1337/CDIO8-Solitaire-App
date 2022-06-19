@@ -63,14 +63,14 @@ class SecondFragment : Fragment() {
         binding.buttonSecond.setOnClickListener {
             //The taken photo have be saved as a file, because otherwise we will
             //only see the thumbnail, which is bas quality
-
             //only see the thumbnail, which is bad quality
             photoFile = getPhotoFile(FILE_NAME)
+
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val fileProvider = FileProvider.getUriForFile(this.requireContext(),"com.example.cdio8_solitaire_app.fileprovider",photoFile)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
-//            Log.i("this is test", getPythonHelloWorld())
+//           Log.i("this is test", getPythonHelloWorld())
 
             try {
                 startActivityForResult(takePictureIntent,REQUEST_CODE)
@@ -132,12 +132,12 @@ class SecondFragment : Fragment() {
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
             //save picture
-            sendPythonPicture(photoFile.absolutePath)
+            val result = sendPythonPicture(photoFile.absolutePath)
+            print("checkpoint")
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             binding.imageView2.setImageBitmap(imageBitmap)
-            val result = recognizePicture()
             if (result.toInt() == - 1) {
                 Toast.makeText(context,"some went wrong with the image",Toast.LENGTH_SHORT).show()
             }
