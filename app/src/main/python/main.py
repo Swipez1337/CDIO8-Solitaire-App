@@ -213,11 +213,4 @@ def watchAndDisplayCards(path, matchingThreshold):
     finalList = transformToCards(allMatchSets)
     columnList = layoutMatches.divideIntoColumns(finalList)
     # layoutMatches.printColumnsDivided(columnList)
-    columnsDividedDTO.getJsonList(columnList)
-
-    if len(allMatches) != 0:
-        testMethods.findErrors(testImage, finalList, True)
-        if show:
-            rois = templateMatching.highlightRois(originAreaToScan, allMatches, (relXval(30), relYval(30)))
-            showImage(testImage, rois)
-    return result
+    return columnsDividedDTO.getJsonList(columnList)

@@ -39,7 +39,7 @@ def divideIntoColumns(allMatches):
     columns = [[], [], [], [], [], [], [], [], [], [], [], []]
 
     base = baseXvalAndColumn(talonMatches, foundationMatches)
-    if base is None:
+    if base is -1:
         return - 1
     baseX = base[0]
     baseColumn = base[1]
