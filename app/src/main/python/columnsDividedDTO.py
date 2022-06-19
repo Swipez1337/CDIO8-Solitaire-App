@@ -2,6 +2,8 @@ import json
 import layoutMatches
 
 def getJsonList(columnsDivided):
+    if columnsDivided is None:
+        return - 1
     jsonList = [[], [], [], [], [], [], [], [], [], [], [], []]
     for index in range(len(columnsDivided)):
         for card in columnsDivided[index]:

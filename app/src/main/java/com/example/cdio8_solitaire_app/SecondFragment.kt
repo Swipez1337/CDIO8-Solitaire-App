@@ -9,6 +9,7 @@ import android.os.Environment
 import android.os.Environment.*
 import android.provider.MediaStore
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -137,7 +138,10 @@ class SecondFragment : Fragment() {
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             binding.imageView2.setImageBitmap(imageBitmap)
             val result = recognizePicture()
-            print(result)
+            if (result.toInt() == - 1) {
+                Toast.makeText(context,"some went wrong with the image",Toast.LENGTH_SHORT).show()
+            }
+            Log.i("imageRecogResult", result)
 
 
         }
