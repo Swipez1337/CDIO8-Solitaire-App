@@ -213,4 +213,7 @@ def watchAndDisplayCards(path, matchingThreshold):
     finalList = transformToCards(allMatchSets)
     columnList = layoutMatches.divideIntoColumns(finalList)
     # layoutMatches.printColumnsDivided(columnList)
+    if columnList is - 1:
+        return - 1
+    columnsDividedDTO.getJsonList(columnList)
     return columnsDividedDTO.getJsonList(columnList)
