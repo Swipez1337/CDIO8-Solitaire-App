@@ -2,7 +2,7 @@ import json
 import layoutMatches
 
 def getJsonList(columnsDivided):
-    if columnsDivided is None:
+    if columnsDivided is - 1:
         return - 1
     jsonList = [[], [], [], [], [], [], [], [], [], [], [], []]
     for index in range(len(columnsDivided)):
