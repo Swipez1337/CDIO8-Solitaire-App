@@ -1,14 +1,9 @@
 package com.example.cdio8_solitaire_app
-
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.*
@@ -18,23 +13,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import com.chaquo.python.PyObject
 import com.example.cdio8_solitaire_app.databinding.FragmentSecondBinding
 import com.example.cdio_solitaire.Model.Columns
-import com.example.cdio_solitaire.controller.SolitaireSolver
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.File.createTempFile
-import java.util.jar.Manifest
-import kotlin.math.log
+import java.io.FileOutputStream
+
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -69,7 +58,7 @@ class SecondFragment : Fragment() {
         binding.trK2.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
             //The taken photo have be saved as a file, because otherwise we will
-            //only see the thumbnail, which is bas quality
+            //only see the thumbnail, which is bad quality
             photoFile = getPhotoFile(FILE_NAME)
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val fileProvider = FileProvider.getUriForFile(this.requireContext(),"com.example.cdio8_solitaire_app.fileprovider",photoFile)
@@ -134,15 +123,17 @@ class SecondFragment : Fragment() {
             binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
+            //save picture
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+            val byteArray= baos.toByteArray()
+            val imageString = Base64.encodeToString(byteArray, Base64.DEFAULT)
+            sendPythonPicture(imageString)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-            val byteArray = baos.toByteArray()
-            val path = sendPythonPicture(Base64.encodeToString(byteArray, Base64.DEFAULT))
-            //val result = recognizePicture()
-            //print(result)
-            //val savedImage = BitmapFactory.decodeFile(path)
             binding.imageView2.setImageBitmap(imageBitmap)
+            val result = recognizePicture()
+            print(result)
+
 
         }
         else{

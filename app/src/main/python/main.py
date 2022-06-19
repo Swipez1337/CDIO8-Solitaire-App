@@ -69,10 +69,7 @@ def recognizeImage():
             print("--- %s seconds ---" % (time.time() - start_time))
     return result
 
-def recognizeTakenImage():
-    files_dir = str(Python.getPlatform().getApplication().getFilesDir())
-    filename = "/currentImage.png"
-    path = "".join((files_dir,filename))
+def recognizeTakenImage(path):
     result = watchAndDisplayCards(path, .86)
     return result
 
@@ -90,15 +87,12 @@ def rotationBacktrack(coordinates, degrees=0):
     return int(newX), int(newY)
 
 # This is the main function that is executed continuously to watch for new cards and display them
-def watchAndDisplayCards(testImage, matchingThreshold):
+def watchAndDisplayCards(path, matchingThreshold):
     cardsDetected.clear()
     # originImage = cv2.imread(path.join(testImage))
     ## NEEDS UPDATE: order of getimage/grayscale/addpadding is wrong
-    filename = testImage
-
-    # originImage = getImage(testImage, False)
-    originImage = cv2.imread(filename)
-
+    # originImage = getImage(testImage, False
+    originImage = cv2.imread(path)
     originImage = cv2.resize(originImage, (3088, 2316))
     # add padding to image to prevent search area from going out of bounds during template matching
     originImage = addPadding(originImage, dimensions)
@@ -112,8 +106,7 @@ def watchAndDisplayCards(testImage, matchingThreshold):
         # image = cv2.imread(path.join(testImage))
 
         # originImage = getImage(testImage, False)
-        image = cv2.imread(path.join(filename))
-
+        image = cv2.imread(path)
         # adds padding to prevent going out of bounds when searching in rotated image
         image = addPadding(image, dimensions)
         image = screen.imageToBw(image)
@@ -221,7 +214,3 @@ def watchAndDisplayCards(testImage, matchingThreshold):
             rois = templateMatching.highlightRois(originAreaToScan, allMatches, (30, 30))
             showImage(testImage, rois)
     return result
-
-
-
-print(recognizeImage())

@@ -10,12 +10,10 @@ def showImage(testImage, rois):
     cv2.imshow(testImage, imS)  # Show image
     cv2.waitKey(0)  # Display the image infinitely until any keypres
 
-
 # loads image and returns it
 def getImage(name, template):
     # filename = name + '.png'
     filename = join(dirname(__file__), name + '.png')
-
     if template:
         image = cv2.imread(path.join(filename))
     else:
@@ -24,3 +22,8 @@ def getImage(name, template):
 
     image = screen.imageToBw(image)
     return image
+
+def getPath():
+    # filename = name + '.png'
+    filename = join(dirname(__file__), 'test2.png')
+    return filename

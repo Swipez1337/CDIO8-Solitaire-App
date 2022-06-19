@@ -11,6 +11,5 @@ def helloworld():
     cv2vers = print(cv2.version) 
     out = np.zeros(5)
     return res + str(out) + str(cv2vers) + str(sqrut) + word
-    
 
 # helloworld()
