@@ -24,7 +24,8 @@ from imageModification import addPadding
 # when True displays image with detected areas
 from matchOrganising import transformToCards
 import sys
-
+import settings
+from settings import relXval, relYval
 
 show = False
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
@@ -36,11 +37,16 @@ matchingThresholds = [.80]
 rotations = [-3, -6, 3, 6, 0]
 rotations = [0]
 
-# dimensions of image
-dimensions = [4032, 3024]
-# it's faster to scan a smaller area rather than the whole screen
-areaToScanTopLeft = (0, 0)
-areaToScanBottomRight = (4032, 3024)
+dimensions = settings.dimensions
+# chosen dimensions for image
+imageDim = settings.imageDim
+# dimensions of padding added
+padDim = settings.padDim
+# base dimensions that relative x, y distances are calculated from
+baseDim = settings.baseDim
+# NEEDS DONE, SET NECESSARY RELATIVE AREA TO SEARCH
+areaToScanTopLeft = settings.areaToScanTopLeft
+areaToScanBottomRight = settings.areaToScanBottomRight
 # things we're looking for
 suits = testSets.suits
 ranks = testSets.values
@@ -93,9 +99,9 @@ def watchAndDisplayCards(path, matchingThreshold):
     ## NEEDS UPDATE: order of getimage/grayscale/addpadding is wrong
     # originImage = getImage(testImage, False
     originImage = cv2.imread(path)
-    originImage = cv2.resize(originImage, (3088, 2316))
+    originImage = cv2.resize(originImage, (imageDim[0], imageDim[1]))
     # add padding to image to prevent search area from going out of bounds during template matching
-    originImage = addPadding(originImage, dimensions)
+    originImage = addPadding(originImage, padDim)
     originImage = screen.imageToBw(originImage)
     originAreaToScan = originImage[areaToScanTopLeft[1]:areaToScanBottomRight[1],
                        areaToScanTopLeft[0]:areaToScanBottomRight[0]]
@@ -107,9 +113,9 @@ def watchAndDisplayCards(path, matchingThreshold):
 
         # originImage = getImage(testImage, False)
         image = cv2.imread(path)
-        image = cv2.resize(image, (3088, 2316))
+        image = cv2.resize(image, (imageDim[0], imageDim[1]))
         # adds padding to prevent going out of bounds when searching in rotated image
-        image = addPadding(image, dimensions)
+        image = addPadding(image, padDim)
         image = screen.imageToBw(image)
         # rotates image by given degrees
         image = imageModification.rotate(image, rotation)
@@ -153,8 +159,8 @@ def watchAndDisplayCards(path, matchingThreshold):
             for suitMatch in suitList:
                 suitMatchTopLeft = suitMatch['topLeft']
                 # define search area for ranks
-                topLeft = (suitMatchTopLeft[0] - 5, suitMatchTopLeft[1] - 50)
-                bottomRight = (suitMatchTopLeft[0] + 50, suitMatchTopLeft[1] + 0)
+                topLeft = (int(suitMatchTopLeft[0] - relXval(5)), int(suitMatchTopLeft[1] - relYval(50)))
+                bottomRight = (int(suitMatchTopLeft[0] + relXval(50)), int(suitMatchTopLeft[1] + 0))
                 searchArea = areaToScan[topLeft[1]:bottomRight[1], topLeft[0]:bottomRight[0]]
 
                 # list of maps of ranks for a given suit match
@@ -212,6 +218,6 @@ def watchAndDisplayCards(path, matchingThreshold):
     if len(allMatches) != 0:
         testMethods.findErrors(testImage, finalList, True)
         if show:
-            rois = templateMatching.highlightRois(originAreaToScan, allMatches, (30, 30))
+            rois = templateMatching.highlightRois(originAreaToScan, allMatches, (relXval(30), relYval(30)))
             showImage(testImage, rois)
     return result
