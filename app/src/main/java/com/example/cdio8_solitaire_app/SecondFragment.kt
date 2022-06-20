@@ -133,7 +133,8 @@ class SecondFragment : Fragment() {
             binding.imageView2.setRotation(90F)
             //save picture
             val result = sendPythonPicture(photoFile.absolutePath)
-            print("checkpoint")
+            Log.i("resultI", result)
+            Log.d("resultD", result)
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
@@ -188,7 +189,6 @@ class SecondFragment : Fragment() {
         }
 
         // further parsing to add data in columns object
-        val columns = Columns()
         val backside = 'b'
         val gap = ' '
         var i = 0
@@ -199,7 +199,7 @@ class SecondFragment : Fragment() {
 
                 // card faces down
                 if (next == backside) {
-                    columns.addToBottomList(null, null, true, i)
+                    solitaireSolver.addBottomCard(null, null, true, i)
                 }
                 // card faces up
                 else {

@@ -93,12 +93,13 @@ def rotationBacktrack(coordinates, degrees=0):
     return int(newX), int(newY)
 
 # This is the main function that is executed continuously to watch for new cards and display them
-def watchAndDisplayCards(path, matchingThreshold):
+def watchAndDisplayCards(imagePath, matchingThreshold):
     cardsDetected.clear()
     # originImage = cv2.imread(path.join(testImage))
     ## NEEDS UPDATE: order of getimage/grayscale/addpadding is wrong
     # originImage = getImage(testImage, False
-    originImage = cv2.imread(path)
+    #originImage = cv2.imread(path)
+    originImage = cv2.imread(path.join('images', testImage))
     originImage = cv2.resize(originImage, (imageDim[0], imageDim[1]))
     # add padding to image to prevent search area from going out of bounds during template matching
     originImage = addPadding(originImage, padDim)
@@ -112,7 +113,7 @@ def watchAndDisplayCards(path, matchingThreshold):
         # image = cv2.imread(path.join(testImage))
 
         # originImage = getImage(testImage, False)
-        image = cv2.imread(path)
+        image = cv2.imread(imagePath)
         image = cv2.resize(image, (imageDim[0], imageDim[1]))
         # adds padding to prevent going out of bounds when searching in rotated image
         image = addPadding(image, padDim)
