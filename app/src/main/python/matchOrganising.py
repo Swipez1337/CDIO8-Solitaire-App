@@ -1,15 +1,23 @@
 # concentrate the groups of sets to one set per group
 from Identity import Identity
 from testSets import suits
-from settings import relXval, relYval
 
 # takes in all matches and returns a list of cards
 def transformToCards(allSets):
     # HARDCODED width between right and left side of cards
-    cardwidth = relXval(209)
+
+
+    cardwidth = 209
     allGroups = groupByLoc(allSets)
+    # print("LENGTH OF GROUPS\n" + str(len(allGroups)))
+
+    for group in allGroups:
+        printGroup(group)
     categories = divideTwinsAndSingles(allGroups)
     twinsList = categories[0]
+
+
+
     singlesList = categories[1]
     identityList = list()
     for twinGroup in twinsList:
@@ -17,6 +25,7 @@ def transformToCards(allSets):
         coord = averageCoordBetweenTwins(twinGroup)
         identity = Identity(name, coord)
         identityList.append(identity)
+
 
     columnDistance = averageDistanceToNeighbourColumn(identityList)
     templist = list()
@@ -30,22 +39,24 @@ def transformToCards(allSets):
                 coord[0] = coord[0] + cardwidth/2
             else: coord[0] = coord[0] - cardwidth/2
         templist.append(Identity(name, shiftBacksideXval(identity)))
-    identityList += templist
+    identityList = identityList + templist
+    # print("IDENTITY FINAL")
+    # for identity in identityList:
+    #     print(identity.getName())
     return identityList
 
 def shiftBacksideXval(identity):
     # HARDCODED x-value for shifting backside x-value right
     if identity.getName() == 'backside':
-        identity.coord = [identity.getCoord()[0] + relXval(15), identity.getCoord()[1]]
+        identity.coord = [identity.getCoord()[0]+15, identity.getCoord()[1]]
     return identity.getCoord()
-
 
 # TOD0: Fix issue described in note
 # note: I'm working off the assumption that one set will fit into only one subgroup
 # groups sets together by their location such that a single group is the matches for a single identifier ex (heart 4)
 def groupByLoc(allSets):
     # x,y values for which two matches in reach of each other are put into a group
-    boundry = [relXval(25), relYval(25)]
+    boundry = [25, 25]
     # holds all subgroups
     allGroups = list()
 
@@ -153,7 +164,6 @@ def divideTwinsAndSingles(allGroups):
     for group in allGroups:
         twin = findTwin(allGroups, group)
         if twin is None:
-
             singles.append(group)
         else:
             twins.append([group, twin])
@@ -166,8 +176,8 @@ def divideTwinsAndSingles(allGroups):
 # finds the twin of 'group' if it doesn't exist return None
 def findTwin(allGroups, selectedGroup):
     # range for width between right and left side of cards, note: HARDCODED FOR NOW, SHOULD BE UPDATED
-    twinDistanceX = (relXval(195), relYval(240))
-    twinDistanceY = relYval(20)
+    twinDistanceX = (195, 240)
+    twinDistanceY = 20
 
     selectedGroupCoord = averageCoord(selectedGroup)
     for group in allGroups:
@@ -214,14 +224,15 @@ def averageCoordBetweenTwins(twinGroup):
 
 # finds the average x axis distance between neighbouring columns
 def averageDistanceToNeighbourColumn(cards):
+    cards = cards.copy()
     dividedCards = divideTopcardsAndBottomCards(cards)
     allDistances = list()
     totalDistance = 0
 
-    for cardList in dividedCards:
-        for card in cardList:
+    for card in cards:
+        # for card in cardList:
 
-            allDistances += distanceToNeighbourColumn(cardList, card)
+        allDistances += distanceToNeighbourColumn(cards, card)
 
     for distance in allDistances:
         totalDistance += distance
@@ -235,7 +246,7 @@ def averageDistanceToNeighbourColumn(cards):
 # divide cards between talon + foundations and columns
 def divideTopcardsAndBottomCards(cards):
     # HARDCODED value that splits foundations and talons with columns
-    maxY = relYval(900)
+    maxY = 900
     topcards = list()
     bottomcards = list()
     for card in cards:
@@ -248,8 +259,8 @@ def divideTopcardsAndBottomCards(cards):
 # finds distance x axis distance to neighbour columns in any exist
 def distanceToNeighbourColumn(cards, selectedCard):
     # HARDCODED max and min x axis distance between a column and it's neighbour column
-    maxX = relXval(450)
-    minX = relYval(200)
+    maxX = 450
+    minX = 200
     distances = list()
     cards.remove(selectedCard)
     for card in cards:
@@ -260,22 +271,23 @@ def distanceToNeighbourColumn(cards, selectedCard):
 
 # returns whether a match is on the left or right side of card
 def isMatchRightOrLeft(cards, match, columnDistance):
+    cards = cards.copy()
     # HARDCODED value that splits foundations and talons with columns
-    maxY = relYval(900)
+    maxY = 900
     # HARDCODED value to differentiate between distance comparison with card in own column and other column
-    minX = relXval(225)
-    shortestDistance = relXval(5000)
+    minX = 225
+    shortestDistance = 5000
     xdif = 0
     sides = ['left', 'right']
 
     xval = match.getCoord()[0]
     for card in cards:
         # TEMPORARY: below 'if statement' should be removed when Solitare game requirements are applied.
-        if card.getCoord()[1] > maxY:
-            xdifference = xval - card.getCoord()[0]
-            if shortestDistance > abs(xdifference):
-                shortestDistance = abs(xdifference)
-                xdif = xdifference
+        # if card.getCoord()[1] > maxY:
+        xdifference = xval - card.getCoord()[0]
+        if shortestDistance > abs(xdifference):
+            shortestDistance = abs(xdifference)
+            xdif = xdifference
 
     width = abs(shortestDistance) % columnDistance
     if xdif > 0:
@@ -307,4 +319,17 @@ def printGroup(group):
         print("\n")
 
 
-
+def printTwinsAndSingles(categories):
+    twinsList = categories[0]
+    singles = categories[1]
+    for twins in twinsList:
+        print("------------------------------\nTWIN GROUP PAIR")
+        for e in twins:
+            print("SEPARATE TWIN GROUP")
+            for twin in e:
+                twin.printMe()
+    for single in singles:
+        for e in single:
+            e.printMe()
+    print("\nsingles list length " + str(len(twinsList)))
+    print("twin list length " + str(len(singles)) + "\n")

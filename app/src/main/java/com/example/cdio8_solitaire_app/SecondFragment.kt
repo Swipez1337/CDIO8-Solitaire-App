@@ -138,9 +138,9 @@ class SecondFragment : Fragment() {
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             binding.imageView2.setImageBitmap(imageBitmap)
-            if (result.toInt() == - 1) {
-                Toast.makeText(context,"some went wrong with the image",Toast.LENGTH_SHORT).show()
-            }
+//            if (result.toInt() == - 1) {
+//                Toast.makeText(context,"something went wrong with the image",Toast.LENGTH_SHORT).show()
+//            }
             Log.i("imageRecogResult", result)
 
 
@@ -204,7 +204,7 @@ class SecondFragment : Fragment() {
 
                 // card faces down
                 if (next == backside) {
-                    columns.addToBottomList(null, null, true, i)
+                    solitaireSolver.addBottomCard(null, null, true, i)
                 }
                 // card faces up
                 else {
@@ -227,8 +227,10 @@ class SecondFragment : Fragment() {
                         solitaireSolver.addBottomCard(stringRank.toInt(), suit, false, i)
                     }
                     // if card is top card
-                    else {
+                    else if (i <= 10) {
                         solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i)
+                    } else {
+                        solitaireSolver.updateTalon(stringRank.toInt(), suit)
                     }
                 }
             }
