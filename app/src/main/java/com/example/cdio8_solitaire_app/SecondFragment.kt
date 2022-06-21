@@ -119,7 +119,6 @@ class SecondFragment : Fragment() {
 
             binding.trK.visibility = View.VISIBLE
             binding.trK2.visibility = View.VISIBLE
-            binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
             //save picture
