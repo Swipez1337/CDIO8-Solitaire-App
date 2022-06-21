@@ -162,7 +162,7 @@ class SecondFragment : Fragment() {
             // if new column
             if (next == columnStart) {
                 next = charIterator.next()
-                val column = mutableListOf<String>()
+                var column = mutableListOf<String>()
 
                 // in column
                 while (next != columnEnd) {
@@ -183,6 +183,8 @@ class SecondFragment : Fragment() {
                     }
                     next = charIterator.next()
                 }
+                //we reverse the order of the list. backsides first
+                column = column.reversed() as MutableList<String>
                 // add column to all columns
                 allColumns.add(column)
             }
