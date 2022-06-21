@@ -177,7 +177,7 @@ def divideTwinsAndSingles(allGroups):
 # finds the twin of 'group' if it doesn't exist return None
 def findTwin(allGroups, selectedGroup):
     # range for width between right and left side of cards, note: HARDCODED FOR NOW, SHOULD BE UPDATED
-    twinDistanceX = (relXval(195), relXval(240))
+    twinDistanceX = (relXval(160), relXval(285))
     twinDistanceY = relYval(40)
 
     selectedGroupCoord = averageCoord(selectedGroup)
