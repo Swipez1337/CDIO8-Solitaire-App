@@ -127,6 +127,7 @@ class SecondFragment : Fragment() {
             solitaireSolver.printContestSolution()
             Log.i("result", result)
             parseScriptOutput(result)
+            val solution = solitaireSolver.getContestSolution()
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)

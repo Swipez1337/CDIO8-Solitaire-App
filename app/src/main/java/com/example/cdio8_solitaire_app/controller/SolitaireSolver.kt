@@ -84,6 +84,77 @@ class SolitaireSolver {
         }
     }
 
+    fun getContestSolution(): String {
+        val solution = solve()
+        var string = ""
+        if (solution != null) {
+            if (solution[0]!!.suit == "D") {
+                solution[0]!!.suit = "R"
+            }
+
+            if (solution[0]!!.suit == "C") {
+                solution[0]!!.suit = "K"
+            }
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit) {
+                if (cardsInStock < 3 && cardsInTalon < 3) {
+                    if (cardsInStock + cardsInTalon == 3) {
+                        string = string + "S, T"
+                        return string
+                    }
+                    if (cardsInStock + cardsInTalon < 3 && cardsInStock != 0) {
+                        string = string + "game over"
+                        return string
+                    }
+                }
+            }
+
+            if (solution[1] != null) {
+                var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
+                if (columnIndex != null) {
+                    string += ("" + solution[0]!!.suit + solution[0]!!.rank + "-" + (columnIndex + 1))
+                }
+                if (columnIndex == null) {
+                    string += ("" + solution[0]!!.suit + solution[0]!!.rank + "-F")
+                }
+            }
+            if (solution[1] == null) {
+                if (solution[0]!!.rank == 13) {
+                    var columnIndex = 1
+                    for (i in columns.getBottomList()) {
+                        if (i.isEmpty()) {
+                            break
+                        } else {
+                            columnIndex++
+                        }
+                    }
+                    string += ("" + solution[0]!!.suit + solution[0]!!.rank + "-" + columnIndex)
+                }
+                if (solution[0]!!.rank == 1) {
+                    string += ("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
+                }
+            }
+        } else {
+            if (cardsInStock == 0 && cardsInTalon == 3) {
+                string = string + "game over"
+                return string
+            }
+            if (cardsInStock < 3) {
+                if (cardsInTalon + cardsInStock < 3) {
+                    string = string + "game over"
+                    return string
+                }
+                if (cardsInTalon + cardsInStock >= 3) {
+                    string = string + "S, T"
+                    return string
+                }
+            }
+            if (cardsInStock >= 3) {
+                string = string + "T"
+                return string
+            }
+        }
+        return string
+    }
 
     fun printContestSolution() {
         val solution = solve()
