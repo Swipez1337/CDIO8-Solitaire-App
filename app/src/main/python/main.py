@@ -101,10 +101,10 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
     for rotation in rotations:
         # image = cv2.imread(path.join(testImage))
         if not testMode:
+            image  = cv2.imread(imagePath)
+        else:
             filename = join(dirname(__file__), testIm)
             image = cv2.imread(path.join(filename))
-        else:
-            image  = cv2.imread(imagePath)
 
 
 
