@@ -104,8 +104,8 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
             filename = join(dirname(__file__), testIm)
             image = cv2.imread(path.join(filename))
         else:
-            filename = join(dirname(__file__), imagePath)
-            image = cv2.imread(path.join(filename))
+            image  = cv2.imread(imagePath)
+
 
 
         image = cv2.resize(image, (imageDim[0], imageDim[1]))
