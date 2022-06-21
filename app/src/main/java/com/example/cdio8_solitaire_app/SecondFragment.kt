@@ -57,7 +57,6 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.buttonThird.visibility = View.GONE
         binding.trK.visibility = View.GONE
         binding.trK2.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
@@ -117,15 +116,7 @@ class SecondFragment : Fragment() {
     //Automatically used the image intent is used
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            binding.buttonThird.visibility = View.VISIBLE
-            binding.buttonThird.setOnClickListener{
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                try {
-                    startActivityForResult(takePictureIntent,REQUEST_CODE)
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context,"camera not working",Toast.LENGTH_SHORT).show()
-                }
-            }
+
             binding.trK.visibility = View.VISIBLE
             binding.trK2.visibility = View.VISIBLE
             binding.buttonSecond.visibility = View.GONE
