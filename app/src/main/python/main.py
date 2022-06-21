@@ -33,9 +33,10 @@ testImages = ['test2.png']
 
 matchingThresholds = [.80, .81, .82, .83, .84, .85, .86]
 matchingThresholds = [.80]
+
 # range of rotation to be applied to source image
 rotations = [-3, -6, 3, 6, 0]
-rotations = [0]
+rotations = [-1,-2,0,1,2]
 testIm = 'test2.png'
 # dimensions of image
 dimensions = [4032, 3024]
@@ -90,34 +91,12 @@ def rotationBacktrack(coordinates, degrees=0):
 # This is the main function that is executed continuously to watch for new cards and display them
 def watchAndDisplayCards(imagePath, matchingThreshold):
     cardsDetected.clear()
-    if not testMode:
-        filename = join(dirname(__file__), imagePath)
-        originImage = cv2.imread(path.join(filename))
-    else:
-        filename = join(dirname(__file__), testIm)
-        originImage = cv2.imread(path.join(filename))
-
-
-
-    originImage = cv2.resize(originImage, (3088, 2316))
     # add padding to image to prevent search area from going out of bounds during template matching
-    originImage = addPadding(originImage, dimensions)
-    # originImage = screen.imageToBw(originImage)
-    originAreaToScan = originImage[areaToScanTopLeft[1]:areaToScanBottomRight[1],
-                       areaToScanTopLeft[0]:areaToScanBottomRight[0]]
-
     allMatches = []
     allMatchSets = list()
     for rotation in rotations:
         # image = cv2.imread(path.join(testImage))
-        if not testMode:
-            filename = join(dirname(__file__), testIm)
-            image = cv2.imread(path.join(filename))
-        else:
-            filename = join(dirname(__file__), testIm)
-            image = cv2.imread(path.join(filename))
-
-
+        image = cv2.imread(imagePath)
         image = cv2.resize(image, (3088, 2316))
         # adds padding to prevent going out of bounds when searching in rotated image
         image = addPadding(image, dimensions)

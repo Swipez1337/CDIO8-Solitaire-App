@@ -119,11 +119,12 @@ class SecondFragment : Fragment() {
 
             binding.trK.visibility = View.VISIBLE
             binding.trK2.visibility = View.VISIBLE
-            binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
             //save picture
             val result = sendPythonPicture(photoFile.absolutePath)
+            parseScriptOutput(result)
+            solitaireSolver.printContestSolution()
             Log.i("result", result)
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
@@ -173,7 +174,9 @@ class SecondFragment : Fragment() {
                     }
                     next = charIterator.next()
                 }
-                column = column.reversed() as MutableList<String>
+                if (column.isNotEmpty()) {
+                    column = column.reversed() as MutableList<String>
+                }
                 // add column to all columns
                 allColumns.add(column)
             }
@@ -214,7 +217,7 @@ class SecondFragment : Fragment() {
                     }
                     // if card is top card
                     else if (i <= 10) {
-                        solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i)
+                        solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i-6)
                     } else {
                         solitaireSolver.updateTalon(stringRank.toInt(), suit)
                     }

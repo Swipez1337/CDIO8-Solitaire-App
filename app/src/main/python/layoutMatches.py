@@ -37,6 +37,8 @@ def divideIntoColumns(allMatches):
     columns = [[], [], [], [], [], [], [], [], [], [], [], []]
 
     base = baseXvalAndColumn(talonMatches, foundationMatches)
+    if base == -1:
+        return base
     baseX = base[0]
     baseColumn = base[1]
     for match in columnMatches:
@@ -83,7 +85,11 @@ def baseXvalAndColumn(talonMatches, foundationMatches):
             card = foundationMatches[0]
     elif talonLen > 0:
         card = talonMatches[talonLen - 1]
-    else: card = foundationMatches[0]
+    else:
+        if foundationLen > 0:
+            card = foundationMatches[0]
+        else:
+            return -1
 
     # HARDCODED value for image x-val padding
     HF = (4032 - 3088) / 2
