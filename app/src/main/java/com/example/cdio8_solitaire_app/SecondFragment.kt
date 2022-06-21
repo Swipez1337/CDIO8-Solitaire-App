@@ -133,7 +133,7 @@ class SecondFragment : Fragment() {
             binding.imageView2.setRotation(90F)
             //save picture
             val result = sendPythonPicture(photoFile.absolutePath)
-            print("checkpoint")
+            Log.i("result", result)
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)

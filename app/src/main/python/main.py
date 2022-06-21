@@ -35,7 +35,7 @@ matchingThresholds = [.80]
 # range of rotation to be applied to source image
 rotations = [-6,-4,-2,0,2,4,6]
 rotations = [0]
-testIm = 'test14.jpg'
+testIm = 'test2.png'
 # dimensions of image
 dimensions = [4032, 3024]
 # it's faster to scan a smaller area rather than the whole screen
@@ -90,10 +90,10 @@ def rotationBacktrack(coordinates, degrees=0):
 # This is the main function that is executed continuously to watch for new cards and display them
 def watchAndDisplayCards(imagePath, matchingThreshold):
     cardsDetected.clear()
-    # filename = join(dirname(__file__), imagePath)
-    # originImage = cv2.imread(path.join(testImage))
-    filename = join(dirname(__file__), testIm)
+    filename = join(dirname(__file__), imagePath)
     originImage = cv2.imread(path.join(filename))
+    # filename = join(dirname(__file__), testIm)
+    # originImage = cv2.imread(path.join(filename))
     originImage = cv2.resize(originImage, (3088, 2316))
     # add padding to image to prevent search area from going out of bounds during template matching
     originImage = addPadding(originImage, dimensions)

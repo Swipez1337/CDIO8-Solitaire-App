@@ -11,8 +11,8 @@ def transformToCards(allSets):
     allGroups = groupByLoc(allSets)
     # print("LENGTH OF GROUPS\n" + str(len(allGroups)))
 
-    for group in allGroups:
-        printGroup(group)
+    # for group in allGroups:
+    #     printGroup(group)
     categories = divideTwinsAndSingles(allGroups)
     twinsList = categories[0]
 
