@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/textview_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="360dp"
+        android:layout_height="140dp"
         android:text="@string/settings_rules_da"
         app:layout_constraintBottom_toTopOf="@id/button_second"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,6 +21,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title_da"
+        android:textAllCaps="false"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/button_second"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
@@ -34,6 +37,7 @@
         android:layout_height="wrap_content"
         android:text="@string/previous"
         android:background="@drawable/button_shape"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
