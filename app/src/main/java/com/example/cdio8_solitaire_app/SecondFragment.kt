@@ -124,8 +124,7 @@ class SecondFragment : Fragment() {
             binding.imageView2.setRotation(90F)
             //save picture
             val result = sendPythonPicture(photoFile.absolutePath)
-            Log.i("resultI", result)
-            Log.d("resultD", result)
+            Log.i("result", result)
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
@@ -174,7 +173,6 @@ class SecondFragment : Fragment() {
                     }
                     next = charIterator.next()
                 }
-                //we reverse the order of the list. backsides first
                 column = column.reversed() as MutableList<String>
                 // add column to all columns
                 allColumns.add(column)
@@ -215,8 +213,10 @@ class SecondFragment : Fragment() {
                         solitaireSolver.addBottomCard(stringRank.toInt(), suit, false, i)
                     }
                     // if card is top card
-                    else {
+                    else if (i <= 10) {
                         solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i)
+                    } else {
+                        solitaireSolver.updateTalon(stringRank.toInt(), suit)
                     }
                 }
             }

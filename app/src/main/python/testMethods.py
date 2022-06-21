@@ -59,3 +59,4 @@ def getCardsInImage(image):
         cards = []
     cards = list(cards)
     return cards.pop(len(cards) - 1), cards
+

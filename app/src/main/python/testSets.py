@@ -65,9 +65,9 @@ t6 = [hq, dk,dj,c10,s7,hk,ha,c3,h5,h2,d6,dq,ck,h3,d5,s5,da,h9,s8,c6,cq, 17]
 
 t8 = [hq,dk,dj,c10,s7,hk,d8,h7,h6,ha,c3,h5,h2,dq,ck,h3,d4,c9,d6,c8,d5,d10,c4,c7,s5,da,h9,s8,c6,cq, 17]
 
-t11 = [s9,s6,d7,sa,s7,c2,hk,d8,h7,h6,cj,d5,s2,c8,dq,ck,h3,d4,c7,h2,s3,c4,d10,s5,da,h9,c9,s8,c6,cq,d6, 17]
+t11 = [s6,d7,sa,s7,c2,hk,d8,h7,h6,cj,d5,s2,c8,dq,ck,h3,d4,c7,h2,s3,c4,d10,s5,da,h9,c9,s8,c6,cq,d6, 17]
 
-t12 = [s9,s6,d7,sa,hk,d8,h7,h6,cj,d5,c2,s7,h9,dq,ck,h3,c7,c9,h2,s3,c4,d10,s2,s5,da,d4,c8,d3,s4,ca,h8, 13]
+t12 = [s6,d7,sa,hk,d8,h7,h6,cj,d5,c2,s7,h9,dq,ck,h3,c7,c9,h2,s3,c4,d10,s2,s5,da,d4,c8,d3,s4,ca,h8, 13]
 
 t13 = [hq,dk,dj,c10,s7,hk,ha,c3,h5,h2,d6,dq,ck,h3,d5,s5,da,h9,s8,c6,cq, 15]
 

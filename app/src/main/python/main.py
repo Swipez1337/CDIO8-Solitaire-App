@@ -25,9 +25,9 @@ from imageModification import addPadding
 from matchOrganising import transformToCards
 import sys
 import settings
-from settings import relXval, relYval
 
 show = False
+testMode = False
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
 testImages = ['test2.png']
 
@@ -36,17 +36,12 @@ matchingThresholds = [.80]
 # range of rotation to be applied to source image
 rotations = [-3, -6, 3, 6, 0]
 rotations = [0]
-
-dimensions = settings.dimensions
-# chosen dimensions for image
-imageDim = settings.imageDim
-# dimensions of padding added
-padDim = settings.padDim
-# base dimensions that relative x, y distances are calculated from
-baseDim = settings.baseDim
-# NEEDS DONE, SET NECESSARY RELATIVE AREA TO SEARCH
-areaToScanTopLeft = settings.areaToScanTopLeft
-areaToScanBottomRight = settings.areaToScanBottomRight
+testIm = 'test2.png'
+# dimensions of image
+dimensions = [4032, 3024]
+# it's faster to scan a smaller area rather than the whole screen
+areaToScanTopLeft = (0, 0)
+areaToScanBottomRight = (4032, 3024)
 # things we're looking for
 suits = testSets.suits
 ranks = testSets.values
@@ -76,7 +71,7 @@ def recognizeImage():
     return result
 
 def recognizeTakenImage(path):
-    result = watchAndDisplayCards(path, .86)
+    result = watchAndDisplayCards(path, .80)
     return result
 
 # get the coordinates of a point rotated minus 'degrees' around center of image
@@ -95,15 +90,19 @@ def rotationBacktrack(coordinates, degrees=0):
 # This is the main function that is executed continuously to watch for new cards and display them
 def watchAndDisplayCards(imagePath, matchingThreshold):
     cardsDetected.clear()
-    # originImage = cv2.imread(path.join(testImage))
-    ## NEEDS UPDATE: order of getimage/grayscale/addpadding is wrong
-    # originImage = getImage(testImage, False
-    #originImage = cv2.imread(path)
-    originImage = cv2.imread(path.join('images', testImage))
-    originImage = cv2.resize(originImage, (imageDim[0], imageDim[1]))
+    if not testMode:
+        filename = join(dirname(__file__), imagePath)
+        originImage = cv2.imread(path.join(filename))
+    else:
+        filename = join(dirname(__file__), testIm)
+        originImage = cv2.imread(path.join(filename))
+
+
+
+    originImage = cv2.resize(originImage, (3088, 2316))
     # add padding to image to prevent search area from going out of bounds during template matching
-    originImage = addPadding(originImage, padDim)
-    originImage = screen.imageToBw(originImage)
+    originImage = addPadding(originImage, dimensions)
+    # originImage = screen.imageToBw(originImage)
     originAreaToScan = originImage[areaToScanTopLeft[1]:areaToScanBottomRight[1],
                        areaToScanTopLeft[0]:areaToScanBottomRight[0]]
 
@@ -111,12 +110,17 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
     allMatchSets = list()
     for rotation in rotations:
         # image = cv2.imread(path.join(testImage))
+        if not testMode:
+            filename = join(dirname(__file__), testIm)
+            image = cv2.imread(path.join(filename))
+        else:
+            filename = join(dirname(__file__), testIm)
+            image = cv2.imread(path.join(filename))
 
-        # originImage = getImage(testImage, False)
-        image = cv2.imread(imagePath)
-        image = cv2.resize(image, (imageDim[0], imageDim[1]))
+
+        image = cv2.resize(image, (3088, 2316))
         # adds padding to prevent going out of bounds when searching in rotated image
-        image = addPadding(image, padDim)
+        image = addPadding(image, dimensions)
         image = screen.imageToBw(image)
         # rotates image by given degrees
         image = imageModification.rotate(image, rotation)
@@ -160,8 +164,8 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
             for suitMatch in suitList:
                 suitMatchTopLeft = suitMatch['topLeft']
                 # define search area for ranks
-                topLeft = (int(suitMatchTopLeft[0] - relXval(5)), int(suitMatchTopLeft[1] - relYval(50)))
-                bottomRight = (int(suitMatchTopLeft[0] + relXval(50)), int(suitMatchTopLeft[1] + 0))
+                topLeft = (suitMatchTopLeft[0] - 5, suitMatchTopLeft[1] - 50)
+                bottomRight = (suitMatchTopLeft[0] + 50, suitMatchTopLeft[1] + 0)
                 searchArea = areaToScan[topLeft[1]:bottomRight[1], topLeft[0]:bottomRight[0]]
 
                 # list of maps of ranks for a given suit match
