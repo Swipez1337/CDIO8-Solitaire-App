@@ -107,7 +107,7 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
             image = cv2.imread(path.join(filename))
 
 
-
+        image = cv2.flip(image, 1)
         image = cv2.resize(image, (imageDim[0], imageDim[1]))
         # adds padding to prevent going out of bounds when searching in rotated image
         image = addPadding(image, padDim)
