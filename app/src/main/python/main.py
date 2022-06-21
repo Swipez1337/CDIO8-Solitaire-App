@@ -23,17 +23,17 @@ from imageModification import addPadding
 
 # when True displays image with detected areas
 from matchOrganising import transformToCards
+import sys
 import settings
 
 show = False
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
 testImages = ['test2.png']
 
-
 matchingThresholds = [.80, .81, .82, .83, .84, .85, .86]
 matchingThresholds = [.80]
 # range of rotation to be applied to source image
-rotations = [-6,-4,-2,0,2,4,6]
+rotations = [-3, -6, 3, 6, 0]
 rotations = [0]
 testIm = 'test2.png'
 # dimensions of image
@@ -59,7 +59,6 @@ for rank in ranks:
     ranksDict[rank] = getImage(rank, True)
 
 backsideTemplate = getImage("backside", True)
-
 
 def recognizeImage():
     for threshold in matchingThresholds:
@@ -117,7 +116,6 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
 
         backsideMatches = templateMatching.getMatches(areaToScan, backsideTemplate, matchingThreshold)
         backsideMatches = map(lambda match: {'actualLoc': match, 'name': 'backside'}, backsideMatches)
-
 
         # does this work with rotation?
         backsideList = list()
@@ -205,15 +203,10 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
                 allMatchSets.append(backsideObj)
 
 
-
     finalList = transformToCards(allMatchSets)
     columnList = layoutMatches.divideIntoColumns(finalList)
-    layoutMatches.printColumnsDivided(columnList)
-    # testMethods.findErrors(testIm, finalList, True)
+    # layoutMatches.printColumnsDivided(columnList)
     if columnList is - 1:
         return - 1
-
     columnsDividedDTO.getJsonList(columnList)
-
     return columnsDividedDTO.getJsonList(columnList)
-

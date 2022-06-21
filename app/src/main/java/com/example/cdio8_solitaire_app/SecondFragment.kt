@@ -161,7 +161,7 @@ class SecondFragment : Fragment() {
             // if new column
             if (next == columnStart) {
                 next = charIterator.next()
-                val column = mutableListOf<String>()
+                var column = mutableListOf<String>()
 
                 // in column
                 while (next != columnEnd) {
@@ -188,7 +188,6 @@ class SecondFragment : Fragment() {
         }
 
         // further parsing to add data in columns object
-        val columns = Columns()
         val backside = 'b'
         val gap = ' '
         var i = 0
