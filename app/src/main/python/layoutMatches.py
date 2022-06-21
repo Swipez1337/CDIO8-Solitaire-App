@@ -3,6 +3,7 @@ import Identity
 import math
 import columnsDividedDTO
 import matchOrganising
+from settings import relXval, relYval, padImageDimDiff
 
 
 # collecting all matches into 'card dictionaries' with coordinates with both rank and suit
@@ -12,7 +13,7 @@ def divideIntoColumns(allMatches):
     foundationMatches = []
     columnMatches = []
     talonMatches = []
-    talonBoundry = (1150 + 472, 430 + 354)
+    talonBoundry = (relXval(1150) + padImageDimDiff()[0]/2, relYval(430) + padImageDimDiff()[1]/2)
     averageDistance = matchOrganising.averageDistanceToNeighbourColumn(allMatches)
 
     talonX = talonBoundry[0]
@@ -37,6 +38,13 @@ def divideIntoColumns(allMatches):
     columns = [[], [], [], [], [], [], [], [], [], [], [], []]
 
     base = baseXvalAndColumn(talonMatches, foundationMatches)
+    # try:
+    #     baseX = base[0]
+    #     baseColumn = base[1]
+    # except:
+    #     return - 1
+
+
     if base == -1:
         return base
     baseX = base[0]
@@ -44,7 +52,7 @@ def divideIntoColumns(allMatches):
     for match in columnMatches:
         matchX = match.getCoord()[0]
         # HARDCODED approximate value difference in x-value when to cards are probably not in same column
-        currentDiff = 250
+        currentDiff = relXval(250)
         prevDiff = abs(matchX - baseX)
         columnsTraversed = 0
         charge = 1
@@ -85,17 +93,15 @@ def baseXvalAndColumn(talonMatches, foundationMatches):
             card = foundationMatches[0]
     elif talonLen > 0:
         card = talonMatches[talonLen - 1]
-    else:
-        if foundationLen > 0:
-            card = foundationMatches[0]
-        else:
-            return -1
+    elif foundationLen > 0:
+        card = foundationMatches[0]
+    else: return - 1
 
     # HARDCODED value for image x-val padding
-    HF = (4032 - 3088) / 2
+    HF = padImageDimDiff()[0] / 2
     # HARDCODED x-value range for approximate position of stack, talon and foundation
-    stackXBound = 620 + HF;
-    talonXBound = 1100 + HF
+    stackXBound = relXval(620) + HF;
+    talonXBound = relYval(1100) + HF
 
     xval = card.getCoord()[0]
     columnN = 0

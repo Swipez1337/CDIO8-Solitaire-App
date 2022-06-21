@@ -15,7 +15,8 @@ import testMethods
 import time
 from functools import cmp_to_key
 from os.path import dirname, join
-
+import settings
+from settings import relXval, relYval
 from Identity import Identity
 from MatchCombination import MatchCombination
 from displayAndFetch import getImage, showImage
@@ -29,20 +30,24 @@ import settings
 show = False
 testMode = False
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
-testImages = ['test2.png']
-
+testImages = ['test27.jpg']
+testIm = 'test27.jpg'
 matchingThresholds = [.80, .81, .82, .83, .84, .85, .86]
 matchingThresholds = [.80]
-
 # range of rotation to be applied to source image
-rotations = [-3, -6, 3, 6, 0]
-rotations = [-1,-2,0,1,2]
-testIm = 'test2.png'
+rotations = [-4,-2,0,2,4]
+rotations = [0]
 # dimensions of image
-dimensions = [4032, 3024]
-# it's faster to scan a smaller area rather than the whole screen
-areaToScanTopLeft = (0, 0)
-areaToScanBottomRight = (4032, 3024)
+# dimensions = settings.dimensions
+# chosen dimensions for image
+imageDim = settings.imageDim
+# dimensions of padding added
+padDim = settings.padDim
+# base dimensions that relative x, y distances are calculated from
+baseDim = settings.baseDim
+# NEEDS DONE, SET NECESSARY RELATIVE AREA TO SEARCH
+areaToScanTopLeft = settings.areaToScanTopLeft
+areaToScanBottomRight = settings.areaToScanBottomRight
 # things we're looking for
 suits = testSets.suits
 ranks = testSets.values
@@ -80,10 +85,10 @@ def rotationBacktrack(coordinates, degrees=0):
     x = coordinates[0]
     y = coordinates[1]
     radians = (0.0174532925199 * degrees)
-    middleX = dimensions[0] / 2
-    middleY = dimensions[1] / 2
-    x = x - dimensions[0] / 2
-    y = y - dimensions[1] / 2
+    middleX = padDim[0] / 2
+    middleY = padDim[1] / 2
+    x = x - padDim[0] / 2
+    y = y - padDim[1] / 2
     newX = x * cos(radians) - y * sin(radians) + middleX
     newY = x * sin(radians) + y * cos(radians) + middleY
     return int(newX), int(newY)
@@ -91,15 +96,21 @@ def rotationBacktrack(coordinates, degrees=0):
 # This is the main function that is executed continuously to watch for new cards and display them
 def watchAndDisplayCards(imagePath, matchingThreshold):
     cardsDetected.clear()
-    # add padding to image to prevent search area from going out of bounds during template matching
     allMatches = []
     allMatchSets = list()
     for rotation in rotations:
         # image = cv2.imread(path.join(testImage))
-        image = cv2.imread(imagePath)
-        image = cv2.resize(image, (3088, 2316))
+        if not testMode:
+            filename = join(dirname(__file__), testIm)
+            image = cv2.imread(path.join(filename))
+        else:
+            filename = join(dirname(__file__), testIm)
+            image = cv2.imread(path.join(filename))
+
+
+        image = cv2.resize(image, (imageDim[0], imageDim[1]))
         # adds padding to prevent going out of bounds when searching in rotated image
-        image = addPadding(image, dimensions)
+        image = addPadding(image, padDim)
         image = screen.imageToBw(image)
         # rotates image by given degrees
         image = imageModification.rotate(image, rotation)
@@ -143,8 +154,8 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
             for suitMatch in suitList:
                 suitMatchTopLeft = suitMatch['topLeft']
                 # define search area for ranks
-                topLeft = (suitMatchTopLeft[0] - 5, suitMatchTopLeft[1] - 50)
-                bottomRight = (suitMatchTopLeft[0] + 50, suitMatchTopLeft[1] + 0)
+                topLeft = (int(suitMatchTopLeft[0] - relXval(5)), int(suitMatchTopLeft[1] - relYval(50)))
+                bottomRight = (int(suitMatchTopLeft[0] + relXval(50)), int(suitMatchTopLeft[1] + 0))
                 searchArea = areaToScan[topLeft[1]:bottomRight[1], topLeft[0]:bottomRight[0]]
 
                 # list of maps of ranks for a given suit match
@@ -197,7 +208,7 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
     finalList = transformToCards(allMatchSets)
     columnList = layoutMatches.divideIntoColumns(finalList)
     # layoutMatches.printColumnsDivided(columnList)
-    if columnList is - 1:
+    if columnList == - 1:
         return - 1
     columnsDividedDTO.getJsonList(columnList)
     return columnsDividedDTO.getJsonList(columnList)
