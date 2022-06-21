@@ -182,6 +182,7 @@ class SecondFragment : Fragment() {
                     }
                     next = charIterator.next()
                 }
+                column = column.reversed() as MutableList<String>
                 // add column to all columns
                 allColumns.add(column)
             }
