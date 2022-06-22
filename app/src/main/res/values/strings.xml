@@ -12,7 +12,13 @@
 
 
     <!-- Settings -->
-    <string name="settings_rules_da">De alm. regler for 7-kabale gælder. Start spillet ved at tage et billede af din oplagte kabale</string>
+    <string name="settings_rules_da">Sådan bruger du appen:</string>
+    <string name="first_instruction">1. Tryk start spil</string>
+    <string name="second_instruction">2. Læg din 7-kabale op på en flad overflade</string>
+    <string name="third_instruction">3. Tag et billede af din oplagte kabale</string>
+    <string name="fourth_instruction">4. Lav trækket som appen forslår på din kabale</string>
+    <string name="fifth_instruction">5. Tag et billede af den ændrede kabale</string>
+    <string name="sixth_instruction">6. Fortsæt sådan til kabalen enten er løst eller tabt</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="take_picture">Tag billede</string>
