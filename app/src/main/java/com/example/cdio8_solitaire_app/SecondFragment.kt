@@ -126,7 +126,7 @@ class SecondFragment : Fragment() {
             print(result)
             Log.i("result", result)
             parseScriptOutput(result)
-            solitaireSolver.printContestSolution()
+            solitaireSolver.printContestSolutionAndDo()
             val solution = solitaireSolver.getContestSolution()
             binding.trK2.text = solution
             val baos = ByteArrayOutputStream()
