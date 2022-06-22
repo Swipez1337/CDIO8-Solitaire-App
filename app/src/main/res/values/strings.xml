@@ -19,4 +19,6 @@
     <string name="info">For at starte spillet, tag et billede af din oplagte 7-kabale</string>
     <string name="tag_billede">Scan igen</string>
     <string name="træk">Du kan lave følgende træk:</string>
+    <string name="_7_kabale">7-kabale</string>
+    <string name="gruppe_8">Gruppe 8</string>
 </resources>
