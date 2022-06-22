@@ -28,10 +28,10 @@ import sys
 import settings
 
 show = False
-testMode = False
+testMode = True
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
 testImages = ['test27.jpg']
-testIm = 'test27.jpg'
+testIm = 'test2.png'
 matchingThresholds = [.80, .81, .82, .83, .84, .85, .86]
 matchingThresholds = [.80]
 # range of rotation to be applied to source image
@@ -108,7 +108,7 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
 
 
         image = cv2.flip(image, 1)
-        image = imageModification.rotate(image, 180)
+        image = imageModification.rotate(image, 90)
         image = cv2.resize(image, (imageDim[0], imageDim[1]))
         # adds padding to prevent going out of bounds when searching in rotated image
         image = addPadding(image, padDim)

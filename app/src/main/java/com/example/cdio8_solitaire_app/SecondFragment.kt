@@ -123,11 +123,12 @@ class SecondFragment : Fragment() {
             binding.imageView2.setRotation(90F)
             //save picture
             val result = sendPythonPicture(photoFile.absolutePath)
-            parseScriptOutput(result)
-            solitaireSolver.printContestSolution()
+            print(result)
             Log.i("result", result)
             parseScriptOutput(result)
+            solitaireSolver.printContestSolution()
             val solution = solitaireSolver.getContestSolution()
+            binding.trK2.text = solution
             val baos = ByteArrayOutputStream()
             val imageBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
@@ -219,7 +220,7 @@ class SecondFragment : Fragment() {
                     }
                     // if card is top card
                     else if (i <= 10) {
-                        solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i-6)
+                        solitaireSolver.addTopCard(stringRank.toInt(), suit, false, i-7)
                     } else {
                         solitaireSolver.updateTalon(stringRank.toInt(), suit)
                     }

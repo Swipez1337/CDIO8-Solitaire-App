@@ -1,14 +1,17 @@
 # dimensions of image
 dimensions = [4032, 3024]
 # chosen dimensions for image
-imageDim = [5632, 4224]
+# imageDim = [5632, 4224]
+# # dimensions of padding added
+# padDim = [6195, 4646]
+imageDim = [3088, 2316]
 # dimensions of padding added
-padDim = [6195, 4646]
+padDim = [4032, 3024]
 # base dimensions that relative x, y distances are calculated from
 baseDim = [3088, 2316]
 # NEEDS DONE, SET NECESSARY RELATIVE AREA TO SEARCH
 areaToScanTopLeft = (0, 0)
-areaToScanBottomRight = (6195, 4646)
+areaToScanBottomRight = (4032, 3024)
 
 
 def relXval(x):
