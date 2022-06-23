@@ -58,18 +58,19 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.buttonThird.visibility = View.GONE
         binding.trK.visibility = View.GONE
         binding.trK2.visibility = View.GONE
         binding.buttonSecond.setOnClickListener {
-
             //The taken photo have be saved as a file, because otherwise we will
             //only see the thumbnail, which is bas quality
-
+            //only see the thumbnail, which is bad quality
             photoFile = getPhotoFile(FILE_NAME)
+
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val fileProvider = FileProvider.getUriForFile(this.requireContext(),"com.example.cdio8_solitaire_app.fileprovider",photoFile)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
+
+//           Log.i("this is test", getPythonHelloWorld())
 
             try {
                 startActivityForResult(takePictureIntent,REQUEST_CODE)
@@ -92,18 +93,8 @@ class SecondFragment : Fragment() {
     //Automatically used the image intent is used
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            binding.buttonThird.visibility = View.VISIBLE
-            binding.buttonThird.setOnClickListener{
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                try {
-                    startActivityForResult(takePictureIntent,REQUEST_CODE)
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context,"camera not working",Toast.LENGTH_SHORT).show()
-                }
-            }
             binding.trK.visibility = View.VISIBLE
             binding.trK2.visibility = View.VISIBLE
-            binding.buttonSecond.visibility = View.GONE
             binding.infoText.visibility = View.GONE
             binding.imageView2.setRotation(90F)
 
