@@ -29,8 +29,6 @@ matchingThresholds = [.80]
 # range of rotation to be applied to source image
 rotations = [-4,-2,0,2,4]
 rotations = [0]
-# dimensions of image
-# dimensions = settings.dimensions
 # chosen dimensions for image
 imageDim = settings.imageDim
 # dimensions of padding added
@@ -94,7 +92,6 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
     allMatches = []
     allMatchSets = list()
     for rotation in rotations:
-        # image = cv2.imread(path.join(testImage))
         if not testMode:
             image  = cv2.imread(imagePath)
         else:

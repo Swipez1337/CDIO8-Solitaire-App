@@ -44,8 +44,6 @@ def shiftBacksideXval(identity):
         identity.coord = [identity.getCoord()[0] + relXval(15), identity.getCoord()[1]]
     return identity.getCoord()
 
-# TOD0: Fix issue described in note
-# note: I'm working off the assumption that one set will fit into only one subgroup
 # groups sets together by their location such that a single group is the matches for a single identifier ex (heart 4)
 def groupByLoc(allSets):
     # x,y values for which two matches in reach of each other are put into a group
@@ -158,14 +156,12 @@ def divideTwinsAndSingles(allGroups):
         else:
             twins.append([group, twin])
             allGroups.remove(twin)
-
-
     return twins, singles
 
 
 # finds the twin of 'group' if it doesn't exist return None
 def findTwin(allGroups, selectedGroup):
-    # range for width between right and left side of cards, note: HARDCODED FOR NOW, SHOULD BE UPDATED
+    # range for width between right and left side of cards
     twinDistanceX = (relXval(160), relXval(285))
     twinDistanceY = relYval(40)
 
@@ -216,10 +212,7 @@ def averageDistanceToNeighbourColumn(cards):
     totalDistance = 0
 
     for card in cards:
-        # for card in cardList:
-
         allDistances += distanceToNeighbourColumn(cards, card)
-
     for distance in allDistances:
         totalDistance += distance
     if len(allDistances) > 0:
@@ -231,7 +224,6 @@ def averageDistanceToNeighbourColumn(cards):
 
 # divide cards between talon + foundations and columns
 def divideTopcardsAndBottomCards(cards):
-    # HARDCODED value that splits foundations and talons with columns
     maxY = relYval(900)
     topcards = list()
     bottomcards = list()
@@ -242,9 +234,8 @@ def divideTopcardsAndBottomCards(cards):
             bottomcards.append(card)
     return [topcards, bottomcards]
 
-# finds distance x axis distance to neighbour columns in any exist
+# finds x axis distance to neighbour columns if any exist
 def distanceToNeighbourColumn(cards, selectedCard):
-    # HARDCODED max and min x axis distance between a column and it's neighbour column
     maxX = relXval(450)
     minX = relYval(200)
     distances = list()
@@ -258,9 +249,6 @@ def distanceToNeighbourColumn(cards, selectedCard):
 # returns whether a match is on the left or right side of card
 def isMatchRightOrLeft(cards, match, columnDistance):
     cards = cards.copy()
-    # HARDCODED value that splits foundations and talons with columns
-    maxY = relYval(900)
-    # HARDCODED value to differentiate between distance comparison with card in own column and other column
     minX = relXval(225)
     shortestDistance = relXval(5000)
     xdif = 0
@@ -268,8 +256,6 @@ def isMatchRightOrLeft(cards, match, columnDistance):
 
     xval = match.getCoord()[0]
     for card in cards:
-        # TEMPORARY: below 'if statement' should be removed when Solitare game requirements are applied.
-        # if card.getCoord()[1] > maxY:
         xdifference = xval - card.getCoord()[0]
         if shortestDistance > abs(xdifference):
             shortestDistance = abs(xdifference)
