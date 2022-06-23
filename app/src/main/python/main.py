@@ -20,7 +20,7 @@ from matchOrganising import transformToCards
 import settings
 
 show = False
-testMode = True
+testMode = False
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
 testImages = ['test27.jpg']
 testIm = 'test2.png'
