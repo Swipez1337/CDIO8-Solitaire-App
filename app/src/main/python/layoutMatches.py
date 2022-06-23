@@ -1,13 +1,10 @@
-import cv2
-import Identity
-import math
-import columnsDividedDTO
+# @author s183925, @author s201729
+
 import matchOrganising
 from settings import relXval, relYval, padImageDimDiff
 
-
+# @author s183925, @author s201729
 # collecting all matches into 'card dictionaries' with coordinates with both rank and suit
-
 def divideIntoColumns(allMatches):
     # match seperation into column, foundation and talon cards
     foundationMatches = []
@@ -28,7 +25,6 @@ def divideIntoColumns(allMatches):
         else:
             talonMatches.append(match)
 
-
     # we sort the cards in terms of x axis (basically, we start at the left most card(
     columnMatches = sorted(columnMatches, key=lambda match: match.coord[1])
     talonMatches = sorted(talonMatches, key=lambda match: match.coord[0])
@@ -38,12 +34,6 @@ def divideIntoColumns(allMatches):
     columns = [[], [], [], [], [], [], [], [], [], [], [], []]
 
     base = baseXvalAndColumn(talonMatches, foundationMatches)
-    # try:
-    #     baseX = base[0]
-    #     baseColumn = base[1]
-    # except:
-    #     return - 1
-
 
     if base == -1:
         return base
@@ -82,7 +72,7 @@ def divideIntoColumns(allMatches):
 
     return columns
 
-# METHOD IS BUGGY: if hardcoded bounds are wrong
+# @author s201729
 # out of stock, talon and first foundation, finds the rightmost card and returns it's x-value and column number
 def baseXvalAndColumn(talonMatches, foundationMatches):
     talonLen = len(talonMatches); foundationLen = len(foundationMatches)
@@ -114,7 +104,7 @@ def baseXvalAndColumn(talonMatches, foundationMatches):
             columnN = 3
     return xval, columnN
 
-
+# @author s183925
 def printColumnsDivided(columnsDivided):
     columns = columnsDivided
     for i in range(len(columns)):

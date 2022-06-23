@@ -1,3 +1,5 @@
+# @author s201729
+
 # concentrate the groups of sets to one set per group
 from Identity import Identity
 from testSets import suits
@@ -5,22 +7,14 @@ from settings import relXval, relYval
 
 # takes in all matches and returns a list of cards
 def transformToCards(allSets):
-    # HARDCODED width between right and left side of cards
-
-
     cardwidth = relXval(209)
     allGroups = groupByLoc(allSets)
-    # print("LENGTH OF GROUPS\n" + str(len(allGroups)))
-
-    # for group in allGroups:
-    #     printGroup(group)
     categories = divideTwinsAndSingles(allGroups)
     twinsList = categories[0]
-
-
-
     singlesList = categories[1]
     identityList = list()
+
+    # create cards out of twinGroups
     for twinGroup in twinsList:
         name = typicalIdentifiers(twinGroup[0] + twinGroup[1])
         coord = averageCoordBetweenTwins(twinGroup)
@@ -30,6 +24,7 @@ def transformToCards(allSets):
 
     columnDistance = averageDistanceToNeighbourColumn(identityList)
     templist = list()
+    # create cards from single groups
     for singleGroup in singlesList:
         name = typicalIdentifiers(singleGroup)
         coord = averageCoord(singleGroup)
@@ -41,9 +36,6 @@ def transformToCards(allSets):
             else: coord[0] = coord[0] - cardwidth/2
         templist.append(Identity(name, shiftBacksideXval(identity)))
     identityList = identityList + templist
-    # print("IDENTITY FINAL")
-    # for identity in identityList:
-    #     print(identity.getName())
     return identityList
 
 def shiftBacksideXval(identity):
@@ -80,7 +72,6 @@ def groupByLoc(allSets):
                         set.subGrouped = True
             allGroups.append(subGroup)
     return allGroups
-
 
 
 # finds most common suit and rank in groups
@@ -156,8 +147,6 @@ def uniqueIdentifiers(group):
     return uniques
 
 
-
-
 # divides given groups into two categories, those that have a twin suit/rank and singles that don't
 def divideTwinsAndSingles(allGroups):
     twins = list()
@@ -217,10 +206,6 @@ def averageCoordBetweenTwins(twinGroup):
     coord2 = averageCoord(twinGroup[1])
     coord = [(coord1[0] + coord2[0]) / 2, (coord1[1] + coord2[1]) / 2]
     return coord
-
-
-
-
 
 
 # finds the average x axis distance between neighbouring columns

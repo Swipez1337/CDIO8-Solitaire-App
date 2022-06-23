@@ -1,3 +1,4 @@
+# @author s201729
 class Identity:
     coord = [0, 0]
     name = ""

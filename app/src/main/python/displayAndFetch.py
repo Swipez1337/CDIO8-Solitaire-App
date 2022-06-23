@@ -3,13 +3,8 @@ import os.path as path
 import screen
 from os.path import dirname, join
 
-
-def showImage(testImage, rois):
-    cv2.namedWindow(testImage, cv2.WINDOW_AUTOSIZE)  # Create window with freedom of dimensions
-    imS = cv2.resize(rois, (1080, 780))  # Resize image
-    cv2.imshow(testImage, imS)  # Show image
-    cv2.waitKey(0)  # Display the image infinitely until any keypres
-
+# this code is modiefied code from https://github.com/naderchehab/card-detector
+# @author https://github.com/naderchehab, @author s201729, @author s183925
 # loads image and returns it
 def getImage(name, template):
     # filename = name + '.png'

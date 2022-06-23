@@ -1,5 +1,5 @@
 import testSets
-
+# @author s201729
 # prints missing positives and false positives of cards for a given test and corresponding cardset
 def findErrors(image, cardsDetected, identityList = False):
     cardsFoundList = list()

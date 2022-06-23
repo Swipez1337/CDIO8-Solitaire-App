@@ -1,9 +1,7 @@
-# project is modified code from: https://github.com/naderchehab/card-detector
-import sys
-from com.chaquo.python import Python
+# project is modified code from: https://github.com/naderchehab/card-detector/blob/master/main.py
+# @author https://github.com/naderchehab, @author s201729
 import cv2
 import layoutMatches
-import numpy as np
 import os.path as path
 import columnsDividedDTO
 from numpy import cos, sin
@@ -13,22 +11,16 @@ import screen
 import testSets
 import testMethods
 import time
-from functools import cmp_to_key
 from os.path import dirname, join
-import settings
 from settings import relXval, relYval
-from Identity import Identity
 from MatchCombination import MatchCombination
-from displayAndFetch import getImage, showImage
+from displayAndFetch import getImage
 from imageModification import addPadding
-
-# when True displays image with detected areas
 from matchOrganising import transformToCards
-import sys
 import settings
 
 show = False
-testMode = False
+testMode = True
 testImages = ['test2.png', 'test6.png', 'test8.png', 'test11.png', 'test12.png']
 testImages = ['test27.jpg']
 testIm = 'test2.png'
@@ -76,10 +68,12 @@ def recognizeImage():
             print("--- %s seconds ---" % (time.time() - start_time))
     return result
 
+# @author s183925
 def recognizeTakenImage(path):
-    result = watchAndDisplayCards(path, .80)
+    result = watchAndDisplayCards(path, .84)
     return result
 
+# @author s201729
 # get the coordinates of a point rotated minus 'degrees' around center of image
 def rotationBacktrack(coordinates, degrees=0):
     x = coordinates[0]
@@ -93,7 +87,8 @@ def rotationBacktrack(coordinates, degrees=0):
     newY = x * sin(radians) + y * cos(radians) + middleY
     return int(newX), int(newY)
 
-# This is the main function that is executed continuously to watch for new cards and display them
+# @author https://github.com/naderchehab, @author s201729
+# Main method that runs template matching.
 def watchAndDisplayCards(imagePath, matchingThreshold):
     cardsDetected.clear()
     allMatches = []
@@ -106,9 +101,8 @@ def watchAndDisplayCards(imagePath, matchingThreshold):
             filename = join(dirname(__file__), testIm)
             image = cv2.imread(path.join(filename))
 
-
-        image = cv2.flip(image, 1)
-        image = imageModification.rotate(image, 90)
+        # image = cv2.flip(image, 1)
+        # image = imageModification.rotate(image, 180)
         image = cv2.resize(image, (imageDim[0], imageDim[1]))
         # adds padding to prevent going out of bounds when searching in rotated image
         image = addPadding(image, padDim)

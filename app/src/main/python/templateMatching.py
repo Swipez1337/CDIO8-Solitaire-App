@@ -1,3 +1,5 @@
+# this code is from https://github.com/naderchehab/card-detector/blob/master/templateMatching.py
+# @author https://github.com/naderchehab
 import cv2
 import numpy as np
 
