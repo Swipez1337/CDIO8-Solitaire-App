@@ -81,6 +81,7 @@ def rotationBacktrack(coordinates, degrees=0):
     middleY = padDim[1] / 2
     x = x - padDim[0] / 2
     y = y - padDim[1] / 2
+    # calculation from https://keisan.casio.com/exec/system/1496886458#!
     newX = x * cos(radians) - y * sin(radians) + middleX
     newY = x * sin(radians) + y * cos(radians) + middleY
     return int(newX), int(newY)

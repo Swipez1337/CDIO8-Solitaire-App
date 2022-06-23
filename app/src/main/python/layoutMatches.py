@@ -41,7 +41,6 @@ def divideIntoColumns(allMatches):
     baseColumn = base[1]
     for match in columnMatches:
         matchX = match.getCoord()[0]
-        # HARDCODED approximate value difference in x-value when to cards are probably not in same column
         currentDiff = relXval(250)
         prevDiff = abs(matchX - baseX)
         columnsTraversed = 0
