@@ -384,7 +384,7 @@ class SolitaireSolver {
                             useRuleFour = false,
                             useRuleFive = true,
                             useRuleSix = true,
-                            useRuleSeven = false,
+                            useRuleSeven = true,
                             useRuleEight = true,
                         )
                         if (viableMove != null) {
@@ -556,7 +556,13 @@ class SolitaireSolver {
         if (!kingWaiting && emptySpot) {
             return false
         }
-        return true
+        if (kingWaiting && !emptySpot) {
+            return true
+        }
+        if (!kingWaiting && !emptySpot) {
+            return true
+        }
+        return false
     }
 
     fun ruleSix(card: Card): Boolean {
