@@ -1,3 +1,4 @@
+# @author s201729
 class MatchCombination:
     coord = [0, 0]
     suit = ''

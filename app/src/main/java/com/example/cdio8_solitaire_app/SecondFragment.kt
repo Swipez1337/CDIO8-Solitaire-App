@@ -78,10 +78,10 @@ class SecondFragment : Fragment() {
             }
         }
     }
-
+    /***
+     * @author s201729, s183925
+     */
     private fun sendPythonPicture(path: String): String  {
-        //code largely gotten from:
-        //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this.requireContext()))
         }
@@ -89,16 +89,7 @@ class SecondFragment : Fragment() {
         val pythonFile = python.getModule("sendImage")
         return pythonFile.callAttr("sendPicture", path).toString()
     }
-    private fun recognizePicture(): String  {
-        //code largely gotten from:
-        //stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
-        if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(this.requireContext()))
-        }
-        val python = Python.getInstance()
-        val pythonFile = python.getModule("main")
-        return pythonFile.callAttr("recognizeTakenImage").toString()
-    }
+
 
     private fun getPhotoFile(fileName: String): File {
         val storageDir = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -139,7 +130,11 @@ class SecondFragment : Fragment() {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
-    //parses output from python script and inserts them into columns structure
+
+    /***
+     * @author s201729
+     * parses output from python script and inserts them into columns structure
+     */
     private fun parseScriptOutput(stringData: String) {
         val charIterator = stringData.toCharArray().iterator()
         val allColumns: MutableList<MutableList<String>> = mutableListOf()
@@ -228,16 +223,5 @@ class SecondFragment : Fragment() {
             }
             i += 1
         }
-    }
-
-    // test method for identifying issues with kotlin to python script communication
-    private fun getPythonHelloWorld(): String {
-        if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(this.requireContext()))
-        }
-
-        val python = Python.getInstance()
-        val pythonFile = python.getModule("helloworldscript")
-        return pythonFile.callAttr("helloworld").toString()
     }
 }
