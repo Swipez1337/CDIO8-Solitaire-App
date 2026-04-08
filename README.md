@@ -1,6 +1,7 @@
 # CDIO8-Solitaire-App
 
-A project made for DTU course 62410 CDIO-Project spring 2022. 
+A project made for DTU course 62410 CDIO-Project spring 2022.
+A mobile application that analyzes the current state of a Solitaire game from an image and recommends optimal plays. The system combines computer vision and game-solving algorithms to interpret a real-world game and provide decision support.
 
 Made by Group 08. 
 
